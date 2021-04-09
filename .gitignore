@@ -1,5 +1,7 @@
 data/example/*/
 data/real/*/
+clean_data/*
+dirty_data/*
 
 .vscode/*
 !.vscode/settings.json
@@ -140,3 +142,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+.vscode/settings.json
