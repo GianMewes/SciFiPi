@@ -17,7 +17,7 @@ Folgende
 - flag, [TS,Value,QualityFlag] (wert mit einem Error flag in der dritten spalte)
 - replacement [TS, Value] (Value hat Ersatzwert (UINT max))
 - Rauschen
-- Zeitzonen 
+- Zeitzonen test
 
 
 
