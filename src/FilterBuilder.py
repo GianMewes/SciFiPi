@@ -2,15 +2,32 @@ import pandas as pd
 
 from filters.Filter import Filter
 from filters.MissingValueFilter import MissingValueFilter
+from filters.MatrixFilter import MatrixFilter
 
 class FilterBuilder:
 	dataFrame: pd.DataFrame
 
-	def __init__(self, dirtyDataFrame):
-		self.dataFrame = dirtyDataFrame
+	def __init__(self, path):
+		self.dataFrame = pd.read_csv(path)
+
+		# self.dataFrame.columns = self.dataFrame.iloc[0,:]
+		# new_columns = self.dataFrame.iloc[0,:] 
+		# new_columns[0] = 'TIMESTAMP' 
+		# self.dataFrame.columns  = new_columns
+
+		# # drop unnecesary metadata columns
+		# self.dataFrame.drop([0,1], inplace = True)
+
+		# # reset index 
+		# self.dataFrame = self.dataFrame.reset_index(drop=True)
 
 	def filterMissingValues(self):
 		filter = MissingValueFilter()
+		self.dataFrame = filter.applyFilter(self.dataFrame)
+		return self
+
+	def filterMatrix(self):
+		filter = MatrixFilter()
 		self.dataFrame = filter.applyFilter(self.dataFrame)
 		return self
 
