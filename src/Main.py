@@ -20,15 +20,6 @@ def yes_no(answer):
         else:
            print("Please respond with 'y' or 'n' ")
 
-def unpivot(frame):
-    N, K = frame.shape
-    data = {
-        "value": frame.to_numpy().ravel("F"),
-        "variable": np.asarray(frame.columns).repeat(N),
-        "date": np.tile(np.asarray(frame.index), K),
-    }
-    return pd.DataFrame(data, columns=["date", "variable", "value"])
-
 if __name__ == '__main__':
 
 	# get files in input directory and remove all not .csv files from list
@@ -42,29 +33,20 @@ if __name__ == '__main__':
 		if not yes_no("\nIdentified following file prefix: '" + prefix + "'   Continue? (y/n) "): exit()
 		synFiles = [(str(prefix) + str(i+1).zfill(math.floor(math.log(len(files)))) + ".csv") for i in range(len(files))]	
 		if not collections.Counter(files) == collections.Counter(synFiles): print("\nPrefix wasn't right. Ciao!") & exit()
-	
+		combined_csv = pd.concat([pd.read_csv("dirty_data/" + x).pivot(index="time", columns="signal", values="value") for x in files ], axis=1)
+		
+
+	print(combined_csv)
 
 
-	
+		
+		
+	''' If naming scheme is given, check timezones.
+	If naming scheme is given, merge files '''
 
+	# path = "dirty_data/" + files[0]
 
-		# for x in files:
-		# 	path = "dirty_data/" + x
-		# 	print(path)
-
-		# If naming scheme is given, check timezones.
-
-	
-
-	# If naming scheme is given, merge files
-
-	path = "dirty_data/" + files[0]
-
-	filterBuilder = FilterBuilder(path)
-	cleanDataFrame = filterBuilder.filterMatrix().getDataFrame()
-
-	print("\n\nCleaned Data Frame: \n\n\n" + str(cleanDataFrame))
-
-
-	# df = unpivot(tm.makeTimeDataFrame(3))
-	print(unpivot(cleanDataFrame))
+	# filterBuilder = FilterBuilder(path)
+	# cleanDataFrame = filterBuilder.filterMatrix().getDataFrame()
+	# print("\n\nCleaned Data Frame: \n\n\n" + str(cleanDataFrame))
+	# cleanDataFrame.to_csv(r'clean_data/clean_data.csv')
