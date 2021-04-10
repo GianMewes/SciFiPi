@@ -2,4 +2,4 @@ from tsCorrection import tsCorrectionFilter
 
 def constructorTest():
     filter = tsCorrectionFilter()
-    assert filter != null
+    assert filter is none
