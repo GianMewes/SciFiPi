@@ -7,6 +7,6 @@ if __name__ == '__main__':
 	print(str(df))
 	
 	filterBuilder = FilterBuilder(df)
-	cleanDataFrame = filterBuilder.filterMissingValues().getDataFrame()
+	cleanDataFrame = filterBuilder.filterTsCorrection().getDataFrame()
 
 	print(str(cleanDataFrame))

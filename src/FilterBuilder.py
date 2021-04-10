@@ -2,6 +2,7 @@ import pandas as pd
 
 from filters.Filter import Filter
 from filters.MissingValueFilter import MissingValueFilter
+from filters.tsCorrection import tsCorrectionFilter
 
 class FilterBuilder:
 	dataFrame: pd.DataFrame
@@ -11,6 +12,11 @@ class FilterBuilder:
 
 	def filterMissingValues(self):
 		filter = MissingValueFilter()
+		self.dataFrame = filter.applyFilter(self.dataFrame)
+		return self
+
+	def filterTsCorrection(self):
+		filter = tsCorrectionFilter()
 		self.dataFrame = filter.applyFilter(self.dataFrame)
 		return self
 
