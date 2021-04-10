@@ -3,3 +3,5 @@ ipython
 ipython-genutils
 numpy
 pandas
+py7zr
+json
