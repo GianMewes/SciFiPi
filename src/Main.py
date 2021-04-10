@@ -3,9 +3,9 @@ import pandas as pd
 from FilterBuilder import FilterBuilder
 
 if __name__ == '__main__':
-	path = "path to a csv"
+	path = 'dirty_data/dirty_data.csv'
 
 	filterBuilder = FilterBuilder(path)
-	cleanDataFrame = filterBuilder.filterMissingValues().getDataFrame()
+	cleanDataFrame = filterBuilder.filterUnits().getDataFrame()
 
 	print(str(cleanDataFrame))
