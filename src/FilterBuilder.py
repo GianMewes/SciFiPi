@@ -6,8 +6,8 @@ from filters.MissingValueFilter import MissingValueFilter
 class FilterBuilder:
 	dataFrame: pd.DataFrame
 
-	def __init__(self, dirtyDataFrame):
-		self.dataFrame = dirtyDataFrame
+	def __init__(self, path):
+		self.dataFrame = pd.read_csv(path)
 
 	def filterMissingValues(self):
 		filter = MissingValueFilter()

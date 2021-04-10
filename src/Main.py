@@ -3,10 +3,9 @@ import pandas as pd
 from FilterBuilder import FilterBuilder
 
 if __name__ == '__main__':
-	df = pd.DataFrame()
-	print(str(df))
-	
-	filterBuilder = FilterBuilder(df)
+	path = "path to a csv"
+
+	filterBuilder = FilterBuilder(path)
 	cleanDataFrame = filterBuilder.filterMissingValues().getDataFrame()
 
 	print(str(cleanDataFrame))
