@@ -25,27 +25,67 @@ if __name__ == '__main__':
 	# get files in input directory and remove all not .csv files from list
 	files = [x for x in os.listdir("dirty_data/") if '.csv' in x]
 
-	# If multiple files, check if namingscheme is given and if series assumption ist right.
-	if len(files) > 1:
+	# list for the individual DataFrames
+	li = []
 	
+	# If there are multiple files
+	if len(files) > 1:
+
 		print("I found these files: " + str(files))
+
+		# Identify common prefix in filenames and ask if it's right
 		prefix = os.path.commonprefix(files)
 		if not yes_no("\nIdentified following file prefix: '" + prefix + "'   Continue? (y/n) "): exit()
+
+		# Generate synthetic files names with series and compare to filenames. If synthetic names == real names, ok. Else: Ciao! & exit()
 		synFiles = [(str(prefix) + str(i+1).zfill(math.floor(math.log(len(files)))) + ".csv") for i in range(len(files))]	
 		if not collections.Counter(files) == collections.Counter(synFiles): print("\nPrefix wasn't right. Ciao!") & exit()
-		combined_csv = pd.concat([pd.read_csv("dirty_data/" + x).pivot(index="time", columns="signal", values="value") for x in files ], axis=1)
+
+	# format and merge all .csv files to a single DataFrame
+	for x in files:
+
+		# Import .csv to DataFrame
+		tempDataFrame = pd.read_csv("dirty_data/" + x)
 		
-
-	print(combined_csv)
-
-
+		# format to matrix form
+		if len(tempDataFrame.columns) == 3:
+			print(tempDataFrame.head())
+			if yes_no("This might be in row format. Shall I convert it to matrix format for you?"): 
+				tempDataFrame.pivot(index=tempDataFrame.columns[0], columns=tempDataFrame.columns[1], values=tempDataFrame.columns[2])
 		
+		# Rename first column to TIMESTAMP and convert first column to pandas datetime with format detection
+		tempDataFrame.rename(columns={tempDataFrame.columns[0]: "TIMESTAMP"}, inplace = True, errors="raise")
+		tempDataFrame["TIMESTAMP"] =  pd.to_datetime(tempDataFrame["TIMESTAMP"], infer_datetime_format=True)
 		
-	''' If naming scheme is given, check timezones.
-	If naming scheme is given, merge files '''
+		# Make TIMESTAMP to DataFram.index
+		tempDataFrame = tempDataFrame.set_index("TIMESTAMP")
 
-	# path = "dirty_data/" + files[0]
+		# Check and set timezone information
+		if str(tempDataFrame.index.tzinfo) == "None":
+			tempDataFrame = tempDataFrame.tz_localize(tz = "UTC")
+		else:
+			tempDataFrame = tempDataFrame.tz_convert(tz = "UTC")
+		
+		print(tempDataFrame.head())
 
+		# add tempDataFrame to list of imported and formated DataFrames
+		li.append(tempDataFrame)
+
+	li[2] = li[2].tz_convert(tz = "America/Belem")
+	print(li[2].head())
+
+	if len(li) == 1:
+		dataFrame = li[0]
+	
+	else:
+		print("Do Stuff .. ")
+
+		''' Merge DataFrames in li with regard to timestamp and signal '''
+		# print("\n" + li[0].corrwith(li[0], axis=0))
+		# dataFrame = pd.concat([x for x in li ], axis=1)
+		
+	# print(dataFrame.head()) 
+		
 	# filterBuilder = FilterBuilder(path)
 	# cleanDataFrame = filterBuilder.filterMatrix().getDataFrame()
 	# print("\n\nCleaned Data Frame: \n\n\n" + str(cleanDataFrame))
