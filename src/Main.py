@@ -50,7 +50,7 @@ if __name__ == '__main__':
 		filterBuilder.formatData()
 
 		if x == files[2]:
-			filterBuilder = FilterBuilder(filterBuilder.getDataFrame().tz_localize(tz = "Etc/GMT-3"))
+			filterBuilder.dataFrame = filterBuilder.dataFrame.tz_localize(tz = "Etc/GMT-3")
 
 		tempDataFrame = filterBuilder.fixTimeZone().getDataFrame()
 		
