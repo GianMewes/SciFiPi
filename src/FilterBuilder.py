@@ -3,12 +3,14 @@ import pandas as pd
 from filters.Filter import Filter
 from filters.MissingValueFilter import MissingValueFilter
 from filters.MatrixFilter import MatrixFilter
+from filters.FormatData import FormatDataFrame
+from filters.FixTimeZone import FixTimezone
 
 class FilterBuilder:
-	dataFrame: pd.DataFrame
+	# dataFrame: pd.DataFrame
 
-	def __init__(self, path):
-		self.dataFrame = pd.read_csv(path)
+	def __init__(self, dataFrame:pd.DataFrame):
+		self.dataFrame = dataFrame
 
 		# self.dataFrame.columns = self.dataFrame.iloc[0,:]
 		# new_columns = self.dataFrame.iloc[0,:] 
@@ -31,9 +33,16 @@ class FilterBuilder:
 		self.dataFrame = filter.applyFilter(self.dataFrame)
 		return self
 
-	# def filterUnits():
-	# 	UnitFilter.filterUnits()
-	# 	return self
+	def formatData(self):
+		filter = FormatDataFrame()
+		self.dataFrame = filter.applyFilter(self.dataFrame)
+		return self
+
+	def fixTimeZone(self):
+		filter = FixTimezone()
+		self.dataFrame = filter.applyFilter(self.dataFrame)
+		return self
+
 
 	def getDataFrame(self):
 		return self.dataFrame

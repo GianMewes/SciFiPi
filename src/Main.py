@@ -9,25 +9,22 @@ from sklearn.metrics.pairwise import cosine_similarity
 from FilterBuilder import FilterBuilder
 
 def yes_no(answer):
-    yes = set(['y'])
-    no = set(['n'])
-     
-    while True:
-        choice = input(answer).lower()
-        if choice in yes:
-           return True
-        elif choice in no:
-           return False
-        else:
-           print("Please respond with 'y' or 'n' ")
+	yes = set(['y'])
+	no = set(['n'])
+	 
+	while True:
+		choice = input(answer).lower()
+		if choice in yes:
+		   return True
+		elif choice in no:
+		   return False
+		else:
+		   print("Please respond with 'y' or 'n' ")
 
 if __name__ == '__main__':
 
 	# get files in input directory and remove all not .csv files from list
 	files = [x for x in os.listdir("dirty_data/") if '.csv' in x]
-
-	# list for the individual DataFrames
-	li = []
 	
 	# If there are multiple files
 	if len(files) > 1:
@@ -42,32 +39,24 @@ if __name__ == '__main__':
 		synFiles = [(str(prefix) + str(i+1).zfill(math.floor(math.log(len(files)))) + ".csv") for i in range(len(files))]	
 		if not collections.Counter(files) == collections.Counter(synFiles): print("\nPrefix wasn't right. Ciao!") & exit()
 
+	# list for the individual DataFrames
+	li = []
+
 	# format and merge all .csv files to a single DataFrame
 	for x in files:
+	
+		tempDataFrame = pd.read_csv("dirty_data/" + str(x))
 
-		# Import .csv to DataFrame
-		tempDataFrame = pd.read_csv("dirty_data/" + x)
-		
-		# format to matrix form
-		if len(tempDataFrame.columns) == 3:
-			print(tempDataFrame.head())
-			if yes_no("This might be in row format. Shall I convert it to matrix format for you?"): 
-				tempDataFrame.pivot(index=tempDataFrame.columns[0], columns=tempDataFrame.columns[1], values=tempDataFrame.columns[2])
-		
-		# Rename first column to TIMESTAMP and convert first column to pandas datetime with format detection
-		tempDataFrame.rename(columns={tempDataFrame.columns[0]: "TIMESTAMP"}, inplace = True, errors="raise")
-		tempDataFrame["TIMESTAMP"] =  pd.to_datetime(tempDataFrame["TIMESTAMP"], infer_datetime_format=True)
-		
-		# Make TIMESTAMP to DataFram.index
-		tempDataFrame = tempDataFrame.set_index("TIMESTAMP")
+		filterBuilder = FilterBuilder(tempDataFrame)
+		filterBuilder.formatData()
 
-		# Check and set timezone information
-		if str(tempDataFrame.index.tzinfo) == "None":
-			tempDataFrame = tempDataFrame.tz_localize(tz = "UTC")
-		else:
-			tempDataFrame = tempDataFrame.tz_convert(tz = "UTC")
+		if x == files[2]:
+			filterBuilder.dataFrame = filterBuilder.dataFrame.tz_localize(tz = "Etc/GMT-3")
+
+		tempDataFrame = filterBuilder.fixTimeZone().getDataFrame()
 		
-		print(tempDataFrame.head())
+		# clear filterBuilder variable
+		del(filterBuilder)
 
 		# add tempDataFrame to list of imported and formated DataFrames
 		li.append(tempDataFrame)
@@ -92,8 +81,6 @@ if __name__ == '__main__':
 		# use partial autocorrelation of the data
 		# df[IDENTIFIED LAG COLUMN] = df[BASE COLUMN].shift(LAG)
 
-		# 
-
 	li[2] = li[2].tz_convert(tz = "America/Belem")
 	print(li[2].head())
 
@@ -105,11 +92,9 @@ if __name__ == '__main__':
 
 		''' Merge DataFrames in li with regard to timestamp and signal '''
 		# print("\n" + li[0].corrwith(li[0], axis=0))
-		# dataFrame = pd.concat([x for x in li ], axis=1)
-		
-	# print(dataFrame.head()) 
-		
-	# filterBuilder = FilterBuilder(path)
-	# cleanDataFrame = filterBuilder.filterMatrix().getDataFrame()
+		dataFrame = pd.concat([x for x in li ], axis=1)
+
+	print(dataFrame.head())
+
 	# print("\n\nCleaned Data Frame: \n\n\n" + str(cleanDataFrame))
-	# cleanDataFrame.to_csv(r'clean_data/clean_data.csv')
+	dataFrame.to_csv(r'clean_data/clean_data.csv')
