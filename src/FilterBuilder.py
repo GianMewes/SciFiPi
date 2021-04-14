@@ -7,7 +7,7 @@ from filters.FormatData import FormatDataFrame
 from filters.FixTimeZone import FixTimezone
 
 class FilterBuilder:
-	dataFrame: pd.DataFrame # TODO: Was macht diese Zeile hier?
+	dataFrame: pd.DataFrame # TODO: Von Gian: Was macht diese Zeile hier?
 
 	def __init__(self, data=None):
 		if isinstance(data, str):

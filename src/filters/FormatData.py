@@ -1,5 +1,6 @@
 import pandas as pd
 
+from helper.yes_no import yes_no
 from filters.Filter import Filter
 
 class FormatDataFrame(Filter):
@@ -18,16 +19,3 @@ class FormatDataFrame(Filter):
 		dataFrame = dataFrame.set_index("TIMESTAMP")
 
 		return dataFrame
-
-	def yes_no(self, answer):
-			yes = set(['y'])
-			no = set(['n'])
-			
-			while True:
-				choice = input(answer).lower()
-				if choice in yes:
-					return True
-				elif choice in no:
-					return False
-				else:
-					print("Please respond with 'y' or 'n' ")

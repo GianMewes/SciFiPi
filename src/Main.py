@@ -4,22 +4,11 @@ import math
 import collections
 import pandas._testing as tm
 import numpy as np
-
 from sklearn.metrics.pairwise import cosine_similarity
-from FilterBuilder import FilterBuilder
 
-def yes_no(answer):
-	yes = set(['y'])
-	no = set(['n'])
-	 
-	while True:
-		choice = input(answer).lower()
-		if choice in yes:
-		   return True
-		elif choice in no:
-		   return False
-		else:
-		   print("Please respond with 'y' or 'n' ")
+from helper.yes_no import yes_no
+
+from FilterBuilder import FilterBuilder
 
 if __name__ == '__main__':
 
