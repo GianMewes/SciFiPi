@@ -5,9 +5,10 @@ from filters.MissingValueFilter import MissingValueFilter
 from filters.MatrixFilter import MatrixFilter
 from filters.FormatData import FormatDataFrame
 from filters.FixTimeZone import FixTimezone
+from filters.FixTimeshifts import FixTimeshifts
 
 class FilterBuilder:
-	dataFrame: pd.DataFrame # TODO: Von Gian: Was macht diese Zeile hier?
+	dataFrame: pd.DataFrame
 
 	def __init__(self, data=None):
 		if isinstance(data, str):
@@ -34,7 +35,12 @@ class FilterBuilder:
 		self.dataFrame = filter.applyFilter(self.dataFrame)
 		return self
 
-	def fixTimeZone(self):
+	def fixTimezone(self):
+		filter = FixTimezone()
+		self.dataFrame = filter.applyFilter(self.dataFrame)
+		return self
+
+	def fixTimeshifts(self):
 		filter = FixTimezone()
 		self.dataFrame = filter.applyFilter(self.dataFrame)
 		return self

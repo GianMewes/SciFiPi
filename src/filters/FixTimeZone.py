@@ -14,6 +14,7 @@ class FixTimezone(Filter):
             # print(dataFrame.head()) 
         
         # TODO : Was ist wenn der DataFrame in einer anderen Zeitzone aufgenommen wurde, aber keine tzinfo enhaelt?
+        # Wenn zwei gleiche Datensätze, dann nimm den mit Zeitzonen-Information
 
         return dataFrame
 

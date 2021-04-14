@@ -42,7 +42,7 @@ if __name__ == '__main__':
 		if x == files[2]:
 			filterBuilder.dataFrame = filterBuilder.dataFrame.tz_localize(tz = "Etc/GMT-3")
 
-		tempDataFrame = filterBuilder.fixTimeZone().getDataFrame()
+		tempDataFrame = filterBuilder.fixTimezone().fixTimeshifts().getDataFrame()
 		
 		# clear filterBuilder variable
 		del(filterBuilder)
