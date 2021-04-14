@@ -7,21 +7,17 @@ from filters.FormatData import FormatDataFrame
 from filters.FixTimeZone import FixTimezone
 
 class FilterBuilder:
-	# dataFrame: pd.DataFrame
+	dataFrame: pd.DataFrame # TODO: Was macht diese Zeile hier?
 
-	def __init__(self, dataFrame:pd.DataFrame):
-		self.dataFrame = dataFrame
-
-		# self.dataFrame.columns = self.dataFrame.iloc[0,:]
-		# new_columns = self.dataFrame.iloc[0,:] 
-		# new_columns[0] = 'TIMESTAMP' 
-		# self.dataFrame.columns  = new_columns
-
-		# # drop unnecesary metadata columns
-		# self.dataFrame.drop([0,1], inplace = True)
-
-		# # reset index 
-		# self.dataFrame = self.dataFrame.reset_index(drop=True)
+	def __init__(self, data=None):
+		if isinstance(data, str):
+			self.dataFrame = pd.read_csv(data)
+		elif isinstance(data, pd.DataFrame):
+			self.dataFrame = data
+		elif data is None:
+			self.dataFrame = pd.DataFrame
+		else:
+			print("FilterBuilder: No Valid Input!")
 
 	def filterMissingValues(self):
 		filter = MissingValueFilter()
