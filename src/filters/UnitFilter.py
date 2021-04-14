@@ -6,24 +6,30 @@ from filters.Filter import Filter
 
 class UnitFilter(Filter):
 	def applyFilter(self, dataFrame:pd.DataFrame):
-		print("UnitValueFilter. DataFrame: " + str(dataFrame))
+		# print("UnitValueFilter. DataFrame: " + str(dataFrame))
 
 		pressure_values = dataFrame.loc[:,'PT102/OUT.CV']
 
 		pressure_values = pd.to_numeric(pressure_values)
 
-		new_pressure_values = []
-		for k in range(len(pressure_values)):
-			if pressure_values[k] < 0.3:
-				new_pressure_values.append(pressure_values[k] * 10)
-			else:
-				new_pressure_values.append(pressure_values[k])
-		dataFrame['PT102/OUT.CV'] = new_pressure_values
+		# calculate change factor between two timestamps
+		change_factor = []
+		change_factor.append(0)
+		for k in range(1, len(pressure_values)):
+			change_factor.append(pressure_values[k]/pressure_values[k-1])
 
-		# d = np.where(pressure_outlier>0)
-		# print(d[0])
+		multiplier = [round(x, 2) if x < 1 else round(x, 1) for x in change_factor]
+		multiplier_low = [i for i,x in enumerate(multiplier) if x==0.1]
+		multiplier_high = [i for i,x in enumerate(multiplier) if x==10]
 
-		# print(pressure_outlier)
-		# dataFrame = dataFrame.drop(['TIMESTAMP'], axis=1)
-		# Do something with the dataFrame
+		for i in range(min(len(multiplier_high), len(multiplier_high))):
+			if multiplier_low[i] < multiplier_high[i]:
+				for n in range(multiplier_low[i], multiplier_high[i]):
+					pressure_values[n] = pressure_values[n] * 10
+			elif multiplier_low[i] > multiplier_high[i]:
+				for n in range(multiplier_high[i], multiplier_low[i]):
+					pressure_values[n] = pressure_values[n] / 10
+
+		dataFrame['PT102/OUT.CV'] = pressure_values
+
 		return dataFrame
