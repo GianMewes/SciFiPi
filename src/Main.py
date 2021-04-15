@@ -36,11 +36,14 @@ if __name__ == '__main__':
 
 		filterBuilder = FilterBuilder("dirty_data/" + str(x))
 
+		print(filterBuilder.dataFrame.head())
+
 		filterBuilder.formatData()
 
 		# TODO: wie erkenne ich den Zeitversatz automatisch?
-		if x == files[2]:
-			filterBuilder.dataFrame = filterBuilder.dataFrame.tz_localize(tz = "Etc/GMT-3")
+		if len(files) > 1:
+			if x == files[2]:
+				filterBuilder.dataFrame = filterBuilder.dataFrame.tz_localize(tz = "Etc/GMT-3")
 
 		tempDataFrame = filterBuilder.fixTimezone().fixTimeshifts().getDataFrame()
 		

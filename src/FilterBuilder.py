@@ -4,7 +4,7 @@ from filters.Filter import Filter
 from filters.MissingValueFilter import MissingValueFilter
 from filters.MatrixFilter import MatrixFilter
 from filters.FormatData import FormatDataFrame
-from filters.FixTimeZone import FixTimezone
+from filters.FixTimezone import FixTimezone
 from filters.FixTimeshifts import FixTimeshifts
 
 class FilterBuilder:
