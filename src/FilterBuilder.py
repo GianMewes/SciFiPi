@@ -3,6 +3,7 @@ import pandas as pd
 from filters.Filter import Filter
 from filters.MissingValueFilter import MissingValueFilter
 from filters.UnitFilter import UnitFilter
+from filters.ImputationFilter import ImputationFilter
 
 class FilterBuilder:
 	dataFrame: pd.DataFrame
@@ -28,6 +29,11 @@ class FilterBuilder:
 
 	def filterUnits(self):
 		filter = UnitFilter()
+		self.dataFrame = filter.applyFilter(self.dataFrame)
+		return self
+
+	def filterImputation(self):
+		filter = ImputationFilter()
 		self.dataFrame = filter.applyFilter(self.dataFrame)
 		return self
 
