@@ -2,21 +2,36 @@ import pandas as pd
 
 from filters.Filter import Filter
 from filters.MissingValueFilter import MissingValueFilter
+from filters.UnitFilter import UnitFilter
+from filters.ImputationFilter import ImputationFilter
 
 class FilterBuilder:
 	dataFrame: pd.DataFrame
 
-	def __init__(self, dirtyDataFrame):
-		self.dataFrame = dirtyDataFrame
+	def __init__(self, data=None):
+		if isinstance(data, str):
+			self.dataFrame = pd.read_csv(data)
+		elif isinstance(data, pd.DataFrame):
+			self.dataFrame = data
+		elif data is None:
+			self.dataFrame = pd.DataFrame
+		else:
+			print("FilterBuilder: No Valid Input!")
 
 	def filterMissingValues(self):
 		filter = MissingValueFilter()
 		self.dataFrame = filter.applyFilter(self.dataFrame)
 		return self
 
-	# def filterUnits():
-	# 	UnitFilter.filterUnits()
-	# 	return self
+	def filterUnits(self):
+		filter = UnitFilter()
+		self.dataFrame = filter.applyFilter(self.dataFrame)
+		return self
+
+	def filterImputation(self):
+		filter = ImputationFilter()
+		self.dataFrame = filter.applyFilter(self.dataFrame)
+		return self
 
 	def getDataFrame(self):
 		return self.dataFrame
