@@ -36,8 +36,6 @@ if __name__ == '__main__':
 
 		filterBuilder = FilterBuilder("dirty_data/" + str(x))
 
-		print(filterBuilder.dataFrame.head())
-
 		filterBuilder.formatData()
 
 		# TODO: wie erkenne ich den Zeitversatz automatisch?
@@ -45,7 +43,7 @@ if __name__ == '__main__':
 			if x == files[2]:
 				filterBuilder.dataFrame = filterBuilder.dataFrame.tz_localize(tz = "Etc/GMT-3")
 
-		tempDataFrame = filterBuilder.fixTimezone().fixTimeshifts().getDataFrame()
+		tempDataFrame = filterBuilder.fixTimezone().getDataFrame()
 		
 		# clear filterBuilder variable
 		del(filterBuilder)
@@ -60,12 +58,10 @@ if __name__ == '__main__':
 	
 	else:
 		print("Do Stuff .. ")
-
+		# print(li[0].head())
 		''' Merge DataFrames in li with regard to timestamp and signal '''
 		# print("\n" + li[0].corrwith(li[0], axis=0))
 		dataFrame = pd.concat([x for x in li ], axis=1)
 
-	print(dataFrame.head())
-
-	# print("\n\nCleaned Data Frame: \n\n\n" + str(cleanDataFrame))
+	print("\n\nCleaned Data Frame: \n\n\n" + str(dataFrame.head()))
 	dataFrame.to_csv(r'clean_data/clean_data.csv')
