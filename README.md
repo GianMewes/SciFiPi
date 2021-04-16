@@ -1,3 +1,6 @@
+## CI-Actions
+[![Python package](https://github.com/GianMewes/KEEN/actions/workflows/testPython.yaml/badge.svg?branch=CI-Test)](https://github.com/GianMewes/KEEN/actions/workflows/testPython.yaml)
+
 # KEEN
 
 
