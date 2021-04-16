@@ -2,6 +2,10 @@ import pandas as pd
 
 from filters.Filter import Filter
 from filters.MissingValueFilter import MissingValueFilter
+from filters.MatrixFilter import MatrixFilter
+from filters.FormatData import FormatDataFrame
+from filters.FixTimezone import FixTimezone
+from filters.FixTimeshifts import FixTimeshifts
 from filters.UnitFilter import UnitFilter
 from filters.ImputationFilter import ImputationFilter
 
@@ -23,6 +27,26 @@ class FilterBuilder:
 		self.dataFrame = filter.applyFilter(self.dataFrame)
 		return self
 
+	def filterMatrix(self):
+		filter = MatrixFilter()
+		self.dataFrame = filter.applyFilter(self.dataFrame)
+		return self
+
+	def formatData(self):
+		filter = FormatDataFrame()
+		self.dataFrame = filter.applyFilter(self.dataFrame)
+		return self
+
+	def fixTimezone(self):
+		filter = FixTimezone()
+		self.dataFrame = filter.applyFilter(self.dataFrame)
+		return self
+
+	def fixTimeshifts(self):
+		filter = FixTimezone()
+		self.dataFrame = filter.applyFilter(self.dataFrame)
+		return self
+
 	def filterUnits(self):
 		filter = UnitFilter()
 		self.dataFrame = filter.applyFilter(self.dataFrame)
@@ -35,17 +59,3 @@ class FilterBuilder:
 
 	def getDataFrame(self):
 		return self.dataFrame
-
-
-
-
-
-# class MyFilter
-
-# 	static myCustomFilter(obj:FilterBuilder = self)
-
-
-
-# Anwender von FilterBuilder / Andere Datei, anderes Projekt
-# filterBuilder = new FilterBuilder("myFolder/dirtyData.csv")
-# filterBuilder.filterUnits().filterMissingValues().getDataFrame()
