@@ -8,19 +8,15 @@ from filters.ImputationFilter import ImputationFilter
 class FilterBuilder:
 	dataFrame: pd.DataFrame
 
-	def __init__(self, path):
-		self.dataFrame = pd.read_csv(path)
-
-		self.dataFrame.columns = self.dataFrame.iloc[0,:]
-		new_columns = self.dataFrame.iloc[0,:] 
-		new_columns[0] = 'TIMESTAMP' 
-		self.dataFrame.columns  = new_columns
-
-		# drop unnecesary metadata columns
-		self.dataFrame.drop([0,1], inplace = True)
-
-		# reset index 
-		self.dataFrame = self.dataFrame.reset_index(drop=True)
+	def __init__(self, data=None):
+		if isinstance(data, str):
+			self.dataFrame = pd.read_csv(data)
+		elif isinstance(data, pd.DataFrame):
+			self.dataFrame = data
+		elif data is None:
+			self.dataFrame = pd.DataFrame
+		else:
+			print("FilterBuilder: No Valid Input!")
 
 	def filterMissingValues(self):
 		filter = MissingValueFilter()
