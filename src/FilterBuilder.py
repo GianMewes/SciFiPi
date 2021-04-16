@@ -6,6 +6,8 @@ from filters.MatrixFilter import MatrixFilter
 from filters.FormatData import FormatDataFrame
 from filters.FixTimezone import FixTimezone
 from filters.FixTimeshifts import FixTimeshifts
+from filters.UnitFilter import UnitFilter
+from filters.ImputationFilter import ImputationFilter
 
 class FilterBuilder:
 	dataFrame: pd.DataFrame
@@ -45,20 +47,15 @@ class FilterBuilder:
 		self.dataFrame = filter.applyFilter(self.dataFrame)
 		return self
 
+	def filterUnits(self):
+		filter = UnitFilter()
+		self.dataFrame = filter.applyFilter(self.dataFrame)
+		return self
+
+	def filterImputation(self):
+		filter = ImputationFilter()
+		self.dataFrame = filter.applyFilter(self.dataFrame)
+		return self
 
 	def getDataFrame(self):
 		return self.dataFrame
-
-
-
-
-
-# class MyFilter
-
-# 	static myCustomFilter(obj:FilterBuilder = self)
-
-
-
-# Anwender von FilterBuilder / Andere Datei, anderes Projekt
-# filterBuilder = new FilterBuilder("myFolder/dirtyData.csv")
-# filterBuilder.filterUnits().filterMissingValues().getDataFrame()
