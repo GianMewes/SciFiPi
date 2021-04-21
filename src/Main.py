@@ -6,19 +6,11 @@ import pandas._testing as tm
 import numpy as np
 
 from FilterBuilder import FilterBuilder
+from sklearn.metrics.pairwise import cosine_similarity
 
-def yes_no(answer):
-	yes = set(['y'])
-	no = set(['n'])
-	 
-	while True:
-		choice = input(answer).lower()
-		if choice in yes:
-		   return True
-		elif choice in no:
-		   return False
-		else:
-		   print("Please respond with 'y' or 'n' ")
+from helper.yes_no import yes_no
+
+from FilterBuilder import FilterBuilder
 
 if __name__ == '__main__':
 
@@ -43,37 +35,34 @@ if __name__ == '__main__':
 
 	# format and merge all .csv files to a single DataFrame
 	for x in files:
-	
-		tempDataFrame = pd.read_csv("dirty_data/" + str(x))
 
-		filterBuilder = FilterBuilder(tempDataFrame)
+		filterBuilder = FilterBuilder("dirty_data/" + str(x))
+
 		filterBuilder.formatData()
 
-		if x == files[2]:
-			filterBuilder.dataFrame = filterBuilder.dataFrame.tz_localize(tz = "Etc/GMT-3")
+		# TODO: wie erkenne ich den Zeitversatz automatisch?
+		if len(files) > 1:
+			if x == files[2]:
+				filterBuilder.dataFrame = filterBuilder.dataFrame.tz_localize(tz = "Etc/GMT-3")
 
-		tempDataFrame = filterBuilder.fixTimeZone().getDataFrame()
+		tempDataFrame = filterBuilder.getDataFrame()
 		
-		# clear filterBuilder variable
-		del(filterBuilder)
-
-		# add tempDataFrame to list of imported and formated DataFrames
+		# add tempDataFrame to list of imported and formated DataFrames and clear variables
 		li.append(tempDataFrame)
+		del(filterBuilder)
+		del(tempDataFrame)
 
-	li[2] = li[2].tz_convert(tz = "America/Belem")
-	print(li[2].head())
+	# li[2] = li[2].tz_convert(tz = "America/Belem")
 
 	if len(li) == 1:
 		dataFrame = li[0]
 	
 	else:
 		print("Do Stuff .. ")
-
+		# print(li[0].head())
 		''' Merge DataFrames in li with regard to timestamp and signal '''
 		# print("\n" + li[0].corrwith(li[0], axis=0))
 		dataFrame = pd.concat([x for x in li ], axis=1)
 
-	print(dataFrame.head())
-
-	# print("\n\nCleaned Data Frame: \n\n\n" + str(cleanDataFrame))
+	print("\n\nCleaned Data Frame: \n\n\n" + str(dataFrame.head()))
 	dataFrame.to_csv(r'clean_data/clean_data.csv')
