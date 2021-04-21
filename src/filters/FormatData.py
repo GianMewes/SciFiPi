@@ -18,8 +18,8 @@ class FormatDataFrame(Filter):
 			dataFrame.rename(columns={dataFrame.columns[0]: "TIMESTAMP"}, inplace = True, errors="raise")
 			try: 
 				start = dataFrame["TIMESTAMP"].where(dataFrame["TIMESTAMP"].str.contains("time",case=False, na=False)).first_valid_index()+1
-				names = dataFrame.iloc[start-2]
-				units = dataFrame.iloc[start-1]
+				names = dataFrame.iloc[start-2, 1::]
+				units = dataFrame.iloc[start-1, 1::]
 				for x in range(start): dataFrame = dataFrame.drop([x])
 			except:
 				pass
@@ -27,12 +27,22 @@ class FormatDataFrame(Filter):
 		# Make first column datetime and set as index. Errors are set as NaT
 		if not pd.api.types.is_datetime64_dtype(dataFrame.index):
 			dataFrame["TIMESTAMP"] =  pd.to_datetime(dataFrame["TIMESTAMP"], infer_datetime_format=True, errors='coerce')
+			# TODO: Fill NaT's!
+			# IDEE: NaT auffüllen mit letzten Wert + .diff()
+			# 		letztes NaT + .diff() == nächster richtiger Zeitstempel zu kontrolle
+			# 		Hilfserie erzeugen mit [0] + n* diff und damit auffüllen.
+			time = dataFrame.iloc["TIMESTAMP",0]
+			diff = dataFrame["TIMESTAMP", 0:1].diff()
+			for x in range(1, dataFrame["TIMESTAMP"].size):
+				time[x] = time[x-1] + diff
+			# dataFrame["TIMESTAMP"] = dataFrame["TIMESTAMP"].fillna(method='pad')
+			print(time)
+			# dataFrame.index = dataFrame.index.fillna()
 			dataFrame = dataFrame.set_index("TIMESTAMP")
 
-		# TODO: Fill NaT's!
 
 
 		if 'names' in locals():
-			dataFrame.columns = names[1:]		
+			dataFrame.columns = names
 
 		return dataFrame
