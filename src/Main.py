@@ -5,6 +5,7 @@ import collections
 import pandas._testing as tm
 import numpy as np
 
+from FilterBuilder import FilterBuilder
 from sklearn.metrics.pairwise import cosine_similarity
 
 from helper.yes_no import yes_no
