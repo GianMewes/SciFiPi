@@ -4,6 +4,7 @@ import math
 import collections
 import pandas._testing as tm
 import numpy as np
+
 from sklearn.metrics.pairwise import cosine_similarity
 
 from helper.yes_no import yes_no
@@ -43,15 +44,14 @@ if __name__ == '__main__':
 			if x == files[2]:
 				filterBuilder.dataFrame = filterBuilder.dataFrame.tz_localize(tz = "Etc/GMT-3")
 
-		tempDataFrame = filterBuilder.fixTimezone().getDataFrame()
+		tempDataFrame = filterBuilder.getDataFrame()
 		
-		# clear filterBuilder variable
-		del(filterBuilder)
-
-		# add tempDataFrame to list of imported and formated DataFrames
+		# add tempDataFrame to list of imported and formated DataFrames and clear variables
 		li.append(tempDataFrame)
+		del(filterBuilder)
+		del(tempDataFrame)
 
-	li[2] = li[2].tz_convert(tz = "America/Belem")
+	# li[2] = li[2].tz_convert(tz = "America/Belem")
 
 	if len(li) == 1:
 		dataFrame = li[0]
