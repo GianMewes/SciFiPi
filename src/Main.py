@@ -4,6 +4,7 @@ import math
 import collections
 import pandas._testing as tm
 import numpy as np
+
 from sklearn.metrics.pairwise import cosine_similarity
 
 from helper.yes_no import yes_no
@@ -36,8 +37,6 @@ if __name__ == '__main__':
 
 		filterBuilder = FilterBuilder("dirty_data/" + str(x))
 
-		print(filterBuilder.dataFrame.head())
-
 		filterBuilder.formatData()
 
 		# TODO: wie erkenne ich den Zeitversatz automatisch?
@@ -45,27 +44,24 @@ if __name__ == '__main__':
 			if x == files[2]:
 				filterBuilder.dataFrame = filterBuilder.dataFrame.tz_localize(tz = "Etc/GMT-3")
 
-		tempDataFrame = filterBuilder.fixTimezone().fixTimeshifts().getDataFrame()
+		tempDataFrame = filterBuilder.getDataFrame()
 		
-		# clear filterBuilder variable
-		del(filterBuilder)
-
-		# add tempDataFrame to list of imported and formated DataFrames
+		# add tempDataFrame to list of imported and formated DataFrames and clear variables
 		li.append(tempDataFrame)
+		del(filterBuilder)
+		del(tempDataFrame)
 
-	li[2] = li[2].tz_convert(tz = "America/Belem")
+	# li[2] = li[2].tz_convert(tz = "America/Belem")
 
 	if len(li) == 1:
 		dataFrame = li[0]
 	
 	else:
 		print("Do Stuff .. ")
-
+		# print(li[0].head())
 		''' Merge DataFrames in li with regard to timestamp and signal '''
 		# print("\n" + li[0].corrwith(li[0], axis=0))
 		dataFrame = pd.concat([x for x in li ], axis=1)
 
-	print(dataFrame.head())
-
-	# print("\n\nCleaned Data Frame: \n\n\n" + str(cleanDataFrame))
+	print("\n\nCleaned Data Frame: \n\n\n" + str(dataFrame.head()))
 	dataFrame.to_csv(r'clean_data/clean_data.csv')
