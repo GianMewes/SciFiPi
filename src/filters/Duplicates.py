@@ -2,33 +2,32 @@ import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from scipy.spatial import distance_matrix
-
 from filters.Filter import Filter
 
 class Duplicates(Filter):
-    def applyFilter(self, dataFrame:pd.DataFrame):
+	def applyFilter(self, dataFrame:pd.DataFrame):
 		# EASY METHOD for detecting exact duplicates
 		# iterate through all columns in dataFrame and find equal columns (duplicates) + delete duplicate columns
 		listOfColumnPairs_exact = []
 		dataFrame_new = dataFrame
-		for i in len(dataFrame.columns)-2:
-			j = i+1
-			for j in len(dataFrame.columns)-1:
-				if dataFrame[i].equals(dataFrame[j]):
-					listOfColumnPair_exact = (i, j)
+		print(dataFrame_new.shape)
+		for i in range(0, len(dataFrame.columns)-2):
+			for j in range(i + 1, len(dataFrame.columns)-1):
+				if dataFrame.iloc[:,i].equals(dataFrame.iloc[:,j]):
+					listOfColumnPair_exact = [i, j]
 					listOfColumnPairs_exact.append(listOfColumnPair_exact)
 					# rename column i with new name ("i, j"), if column header are different
-						if dataFrame_new.columns(listOfColumnPair_exact(0)) = dataFrame_new.columns(listOfColumnPair_exact(1)):
-							new_columnheader = dataFrame_new.columns(listOfColumnPair_exact(0))
-						else:
-							new_columnheader = str(dataFrame_new.columns(listOfColumnPair_exact(0))) + ", " + str(dataFrame_new.columns(listOfColumnPair_exact(1)))
-					dataFrame_new.rename(columns = {str(dataFrame_new.columns(listOfColumnPair_exact(0))) = new_columnheader}, inplace=True)
+					if dataFrame_new.columns[listOfColumnPair_exact[0]] == dataFrame_new.columns[listOfColumnPair_exact[1]]:
+						new_columnheader = dataFrame_new.columns[listOfColumnPair_exact[0]]
+					else:
+						new_columnheader = str(dataFrame_new.columns[listOfColumnPair_exact[0]]) + ", " + str(dataFrame_new.columns[listOfColumnPair_exact[1]])
+					dataFrame_new.rename(columns = {str(dataFrame_new.columns[listOfColumnPair_exact[0]]):str(new_columnheader)}, inplace=True)
 					# delete duplicate column
-					dataFrame_new.drop(dataFrame_new.columns(listOfColumnPair_exact(1)), inplace=True, axis=1)
+					dataFrame_new.drop(dataFrame_new.columns[listOfColumnPair_exact[1]], inplace=True, axis=1)
 				else:
 					pass
 		print(listOfColumnPairs_exact)
-		print(dataFrame_new)
+		print(dataFrame_new.shape)
 
 		# ADVANCED METHOD for detecting different kinds of duplicates
         # calculate similarity of columns, using the cosine similirarity and euclidean distance
@@ -60,5 +59,5 @@ class Duplicates(Filter):
 
 		for cord_partial in listOfColumnPairs_partial:
 			print(cord_partial)
-
-        return dataFrame_new, listOfColumnPairs_exact, listOfColumnPairs_linearTransformed, listOfColumnPairs_partial
+			
+		return dataFrame_new, listOfColumnPairs_exact, listOfColumnPairs_linearTransformed, listOfColumnPairs_partial

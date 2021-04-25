@@ -18,11 +18,13 @@ class Noise(Filter):
         else:
             pass
 
+        print(dataFrame)
+
         # iterate through columnlist 
         for column in columnlist:
             # use a KNN ML model to reconstruct data and denoising it
             clf = KNeighborsRegressor(n_neighbors=100, weights='uniform')
-            clf.fit(dataFrame.index.values[:, np.newaxis], dataFrame[column])
+            clf.fit(dataFrame.index.values[:, np.newaxis], dataFrame.iloc[:,column])
             column_new = clf.predict(dataFrame.index.values[:, np.newaxis])
             # old column is replaced by new column
             dataFrame[column] = column_new

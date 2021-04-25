@@ -8,6 +8,8 @@ from filters.FixTimezone import FixTimezone
 from filters.FixTimeshifts import FixTimeshifts
 from filters.UnitFilter import UnitFilter
 from filters.ImputationFilter import ImputationFilter
+from filters.Duplicates import Duplicates
+from filters.Noise import Noise
 
 class FilterBuilder:
 	dataFrame: pd.DataFrame
@@ -58,4 +60,14 @@ class FilterBuilder:
 		return self
 
 	def getDataFrame(self):
+		return self.dataFrame
+
+	def removeDuplicates(self):
+		filter = Duplicates()
+		self.dataFrame = filter.applyFilter(self.dataFrame)
+		return self.dataFrame
+
+	def removeNoise(self, columnlist):
+		filter = Noise()
+		self.dataFrame = filter.applyFilter(self.dataFrame, columnlist)
 		return self.dataFrame

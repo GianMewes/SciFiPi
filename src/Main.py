@@ -4,6 +4,7 @@ import math
 import collections
 import pandas._testing as tm
 import numpy as np
+import sys
 
 from FilterBuilder import FilterBuilder
 from sklearn.metrics.pairwise import cosine_similarity
@@ -38,7 +39,7 @@ if __name__ == '__main__':
 
 		filterBuilder = FilterBuilder("dirty_data/" + str(x))
 
-		filterBuilder.formatData()
+		filterBuilder.formatData().removeNoise(columnlist = [2])
 
 		# TODO: wie erkenne ich den Zeitversatz automatisch?
 		if len(files) > 1:
