@@ -1,48 +1,80 @@
 import pandas as pd
-import numpy as np
 
 from helper.yes_no import yes_no
 from filters.Filter import Filter
 
 class FormatDataFrame(Filter):
 
-	def applyFilter(self, dataFrame:pd.DataFrame):
-		
-		if len((dataFrame.columns)) == 3:
+
+	df: pd.DataFrame
+	names: pd.DataFrame
+	units: pd.DataFrame
+
+
+	def fixRowFormat(self):
+
+		if len((self.df.columns)) == 3:
 			# convert to matrix
 			# TODO: Klüger machen!
 			if yes_no("This might be in row format. Shall I convert it to matrix format for you?"): 
-				dataFrame.pivot(index=dataFrame.columns[0], columns=dataFrame.columns[1], values=dataFrame.columns[2])
+				self.df.pivot(index=self.df.columns[0], columns=self.df.columns[1], values=self.df.columns[2])
 
-		if not pd.api.types.is_datetime64_dtype(dataFrame.index):
-			dataFrame.rename(columns={dataFrame.columns[0]: "TIMESTAMP"}, inplace = True, errors="raise")
+		return None
+
+
+	def dropNonDataRows(self):
+
+		if not pd.api.types.is_datetime64_dtype(self.df.index):
+			self.df.rename(columns={self.df.columns[0]: "TIMESTAMP"}, inplace = True, errors="raise")
 			try: 
-				start = dataFrame["TIMESTAMP"].where(dataFrame["TIMESTAMP"].str.contains("time",case=False, na=False)).first_valid_index()+1
-				names = dataFrame.iloc[start-2, 1::]
-				units = dataFrame.iloc[start-1, 1::]
-				for x in range(start): dataFrame = dataFrame.drop([x])
+				start = self.df["TIMESTAMP"].where(self.df["TIMESTAMP"].str.contains("time",case=False, na=False)).first_valid_index()+1
+				self.names = self.df.iloc[start-2, 1::]
+				self.units = self.df.iloc[start-1, 1::]
+				for x in range(start): self.df = self.df.drop([x])
 			except:
 				pass
 
+		return None
+
+
+	def setTimestampAsIndex(self):
+
 		# Make first column datetime and set as index. Errors are set as NaT
-		if not pd.api.types.is_datetime64_dtype(dataFrame.index):
-			dataFrame["TIMESTAMP"] =  pd.to_datetime(dataFrame["TIMESTAMP"], infer_datetime_format=True, errors='coerce')
+		if not pd.api.types.is_datetime64_dtype(self.df.index):
+			self.df["TIMESTAMP"] =  pd.to_datetime(self.df["TIMESTAMP"], infer_datetime_format=True, errors='coerce')
 			# TODO: Fill NaT's!
 			# IDEE: NaT auffüllen mit letzten Wert + .diff()
 			# 		letztes NaT + .diff() == nächster richtiger Zeitstempel zu kontrolle
 			# 		Hilfserie erzeugen mit [0] + n* diff und damit auffüllen.
-			time = dataFrame["TIMESTAMP"]
+			time = self.df["TIMESTAMP"]
 			diff = time.diff().median()
 			for x in range(1, time.size):
 				time.iloc[x] = time.iloc[x-1] + diff
-			# dataFrame["TIMESTAMP"] = dataFrame["TIMESTAMP"].fillna(method='pad')
+			# self.df["TIMESTAMP"] = self.df["TIMESTAMP"].fillna(method='pad')
 			print(time)
-			# dataFrame.index = dataFrame.index.fillna()
-			dataFrame = dataFrame.set_index("TIMESTAMP")
+			# self.df.index = self.df.index.fillna()
+			self.df = self.df.set_index("TIMESTAMP")
+
+		return None
 
 
+	def setColumnNames(self):
 
-		if 'names' in locals():
-			dataFrame.columns = names
+		# if 'names' in locals():
+		self.df.columns = self.names
 
-		return dataFrame
+		return None
+
+	def applyFilter(self, dataFrame:pd.DataFrame):
+
+		self.df = dataFrame
+		
+		self.fixRowFormat()
+
+		self.dropNonDataRows()
+
+		self.setTimestampAsIndex()
+
+		self.setColumnNames()		
+
+		return self.df
