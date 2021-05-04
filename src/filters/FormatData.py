@@ -31,10 +31,10 @@ class FormatDataFrame(Filter):
 			# IDEE: NaT auffüllen mit letzten Wert + .diff()
 			# 		letztes NaT + .diff() == nächster richtiger Zeitstempel zu kontrolle
 			# 		Hilfserie erzeugen mit [0] + n* diff und damit auffüllen.
-			time = dataFrame.iloc["TIMESTAMP",0]
-			diff = dataFrame["TIMESTAMP", 0:1].diff()
-			for x in range(1, dataFrame["TIMESTAMP"].size):
-				time[x] = time[x-1] + diff
+			time = dataFrame["TIMESTAMP"]
+			diff = time.diff().median()
+			for x in range(1, time.size):
+				time.iloc[x] = time.iloc[x-1] + diff
 			# dataFrame["TIMESTAMP"] = dataFrame["TIMESTAMP"].fillna(method='pad')
 			print(time)
 			# dataFrame.index = dataFrame.index.fillna()
