@@ -1,4 +1,5 @@
 import pandas as pd
+import sys
 import os
 import math
 import collections
@@ -12,7 +13,8 @@ from helper.yes_no import yes_no
 
 from FilterBuilder import FilterBuilder
 
-if __name__ == '__main__':
+
+def getFilesInFolder():
 
 	# get files in input directory and remove all not .csv files from list
 	files = [x for x in os.listdir("dirty_data/") if '.csv' in x]
@@ -30,6 +32,13 @@ if __name__ == '__main__':
 		synFiles = [(str(prefix) + str(i+1).zfill(math.floor(math.log(len(files)))) + ".csv") for i in range(len(files))]	
 		if not collections.Counter(files) == collections.Counter(synFiles): print("\nPrefix wasn't right. Ciao!") & exit()
 
+	return files
+
+
+if __name__ == '__main__':
+
+	files = getFilesInFolder()
+
 	# list for the individual DataFrames
 	li = []
 
@@ -38,7 +47,10 @@ if __name__ == '__main__':
 
 		filterBuilder = FilterBuilder("dirty_data/" + str(x))
 
-		filterBuilder.formatData()
+		# apply choosen filters
+		for x in sys.argv[1:]:
+			if x == "formatData": filterBuilder.formatData()
+			else: print("Filter '" + x + "' not Found!")
 
 		# TODO: wie erkenne ich den Zeitversatz automatisch?
 		if len(files) > 1:
@@ -64,5 +76,5 @@ if __name__ == '__main__':
 		# print("\n" + li[0].corrwith(li[0], axis=0))
 		dataFrame = pd.concat([x for x in li ], axis=1)
 
-	print("\n\nCleaned Data Frame: \n\n\n" + str(dataFrame.head()))
-	dataFrame.to_csv(r'clean_data/clean_data.csv')
+	# print("\n\nCleaned Data Frame: \n\n\n" + str(dataFrame.head()))
+	dataFrame.to_csv(r'clean_data/cleaned_data.csv')

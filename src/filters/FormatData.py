@@ -18,8 +18,9 @@ class FormatDataFrame(Filter):
 			# TODO: Klüger machen!
 			if yes_no("This might be in row format. Shall I convert it to matrix format for you?"): 
 				self.df.pivot(index=self.df.columns[0], columns=self.df.columns[1], values=self.df.columns[2])
-
-		return None
+				return True
+			else:
+				return False
 
 
 	def dropNonDataRows(self):
@@ -31,10 +32,9 @@ class FormatDataFrame(Filter):
 				self.names = self.df.iloc[start-2, 1::]
 				self.units = self.df.iloc[start-1, 1::]
 				for x in range(start): self.df = self.df.drop([x])
+				return True
 			except:
-				pass
-
-		return None
+				return False
 
 
 	def setTimestampAsIndex(self):
@@ -46,35 +46,36 @@ class FormatDataFrame(Filter):
 			# IDEE: NaT auffüllen mit letzten Wert + .diff()
 			# 		letztes NaT + .diff() == nächster richtiger Zeitstempel zu kontrolle
 			# 		Hilfserie erzeugen mit [0] + n* diff und damit auffüllen.
-			time = self.df["TIMESTAMP"]
+			time = self.df["TIMESTAMP"].copy()
 			diff = time.diff().median()
 			for x in range(1, time.size):
 				time.iloc[x] = time.iloc[x-1] + diff
 			# self.df["TIMESTAMP"] = self.df["TIMESTAMP"].fillna(method='pad')
-			print(time)
+			# print(time)
 			# self.df.index = self.df.index.fillna()
 			self.df = self.df.set_index("TIMESTAMP")
-
-		return None
+			return True
+		else: return False
 
 
 	def setColumnNames(self):
 
-		# if 'names' in locals():
-		self.df.columns = self.names
+		if not self.names.size == 0:
+			self.df.columns = self.names
+			return True
+		else: return False
 
-		return None
 
 	def applyFilter(self, dataFrame:pd.DataFrame):
 
 		self.df = dataFrame
 		
-		self.fixRowFormat()
+		if self.fixRowFormat(): print("[formatData-Filter]: Fixed Row Format")
 
-		self.dropNonDataRows()
+		if self.dropNonDataRows(): print("[formatData-Filter]: Dropped Non Data Rows")
 
-		self.setTimestampAsIndex()
+		if self.setTimestampAsIndex(): print("[formatData-Filter]: Set Timestamp as Index")
 
-		self.setColumnNames()		
+		if self.setColumnNames(): print("[formatData-Filter]: Set Columnames")
 
 		return self.df
