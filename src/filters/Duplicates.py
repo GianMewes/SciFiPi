@@ -29,7 +29,7 @@ class Duplicates(Filter):
 		print(listOfColumnPairs_exact)
 		print(dataFrame_new.shape)
 
-		# ADVANCED METHOD for detecting different kinds of duplicates
+		'''# ADVANCED METHOD for detecting different kinds of duplicates
         # calculate similarity of columns, using the cosine similirarity and euclidean distance
 		# article https://medium.com/@sasi24/cosine-similarity-vs-euclidean-distance-e5d9a9375fc8 compares both similarity measures
 		# both measures have their justification to be used
@@ -60,4 +60,4 @@ class Duplicates(Filter):
 		for cord_partial in listOfColumnPairs_partial:
 			print(cord_partial)
 			
-		return dataFrame_new, listOfColumnPairs_exact, listOfColumnPairs_linearTransformed, listOfColumnPairs_partial
+		return dataFrame_new, listOfColumnPairs_exact, listOfColumnPairs_linearTransformed, listOfColumnPairs_partial'''
