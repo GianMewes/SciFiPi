@@ -1,23 +1,19 @@
 ## CI-Actions
 [![Python package](https://github.com/GianMewes/KEEN/actions/workflows/testPython.yaml/badge.svg)](https://github.com/GianMewes/KEEN/actions/workflows/testPython.yaml)
 
-
 <p align="center">
-    <img width="200px" src="images/SciFiPi-Logo_left.png">
-	<span align="center" style="font-size:64px; font-weight:bold; margin:2em;">Sci-Fi-Pi</span>
-	<img width="200px" src="images/SciFiPi-Logo_right.png">
+    <img width="250px" src="https://github.com/GianMewes/KEEN/blob/documentation/images/images/SciFiPi-Logo_left.png">
+    <img width="250px" src="https://github.com/GianMewes/KEEN/blob/documentation/images/images/SciFiPi-Logo_right.png"> 
 </p>
 
-<h2 align="center">The Scientific Filter Pipeline to Clean your Machine Learning Datasets<h2>
-
+<h1 align="center">Sci-Fi-Pi<h2>
+<h2 align="center">The Scientific Filtering Pipeline to Clean your Machine Learning Datasets<h2>
 
 <hr>
 
 
-Dateien mit gleichem Namen haben gleichen Inhalt
-
-
 ## Erkenntnisse zu den Datenset
+Dateien mit gleichem Namen haben gleichen Inhalt
 
 Beispieldaten sind künstlich erzeugt und beinhalten immer nur "ein" Problem.
 
