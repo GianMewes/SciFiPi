@@ -39,7 +39,7 @@ if __name__ == '__main__':
 
 		filterBuilder = FilterBuilder("dirty_data/" + str(x))
 
-		filterBuilder.formatData().removeNoise(columnlist = [2])
+		filterBuilder.formatData().createEquiDistance()
 
 		# TODO: wie erkenne ich den Zeitversatz automatisch?
 		if len(files) > 1:

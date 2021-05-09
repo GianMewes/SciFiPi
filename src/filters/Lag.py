@@ -1,6 +1,7 @@
 import pandas as pd
-import fastdtw
+import numpy as np
 from dtwalign import dtw
+from fastdtw import fastdtw
 
 from filters.Filter import Filter
 
@@ -27,6 +28,18 @@ class Lag(Filter):
 		
 		# use dynamic time warping to align lagged variables
 		# tutorial: https://htmlpreview.github.io/?https://github.com/statefb/dtwalign/blob/master/example/example.html
+		
 		for columnPair in columnPairs:
-			res = dtw(dataFrame.iloc[:,columnPair[0]].values, dataFrame.iloc[:,columnPair[1]].values)
-			print("dtw distance: {}".format(res.distance))
+			print(columnPair[0])
+			values_list_1 = dataFrame.iloc[0:100,columnPair[0]].to_numpy()
+			values_list_2 = dataFrame.iloc[0:100,columnPair[1]].to_numpy()
+			res = dtw(values_list_1, values_list_2)
+
+			# warp both columns into "alignment path" --> warped column
+			x_path = res.path[:,0]
+			y_path = res.path[:,1]
+			dataFrame.iloc[0:100,columnPair[0]] = dataFrame.iloc[x_path, columnPair[0]]
+			dataFrame.iloc[0:100,columnPair[1]] = dataFrame.iloc[y_path, columnPair[1]]
+			print("dtw distance: {}".format(res.normalized_distance))
+
+		return dataFrame

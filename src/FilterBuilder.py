@@ -11,6 +11,7 @@ from filters.ImputationFilter import ImputationFilter
 from filters.Duplicates import Duplicates
 from filters.Noise import Noise
 from filters.Lag import Lag
+from filters.EquiDistance import EquiDistance
 
 class FilterBuilder:
 	dataFrame: pd.DataFrame
@@ -76,4 +77,9 @@ class FilterBuilder:
 	def removeLag(self, columnPairs):
 		filter = Lag()
 		self.dataFrame = filter.applyFilter(self.dataFrame, columnPairs)
+		return self.dataFrame
+
+	def createEquiDistance(self):
+		filter = EquiDistance()
+		self.dataFrame = filter.applyFilter(self.dataFrame)
 		return self.dataFrame
