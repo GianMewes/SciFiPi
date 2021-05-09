@@ -7,6 +7,7 @@ from preFilters.FixTimeshifts import FixTimeshifts
 from filters.UnitFilter import UnitFilter
 from preFilters.ImputationFilter import ImputationFilter
 from preFilters.Duplicates import Duplicates
+from preFilters.FillTimestampsFilter import FillTimestampsFilter
 from filters.Noise import Noise
 from filters.Lag import Lag
 
@@ -75,3 +76,8 @@ class FilterBuilder:
 		filter = Lag()
 		self.dataFrame = filter.applyFilter(self.dataFrame, columnPairs)
 		return self.dataFrame
+
+	def fillTimestamps(self):
+		filter = FillTimestampsFilter()
+		self.dataFrame = filter.applyFilter(self.dataFrame)
+		return self

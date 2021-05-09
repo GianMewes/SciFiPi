@@ -13,67 +13,77 @@ class FormatDataFrame(Filter):
     def fixRowFormat(self):
 
         if len((self.df.columns)) == 3:
-            # convert to matrix
-            # TODO: Klüger machen!
             if yes_no("This might be in row format. Shall I convert it to matrix format for you?"):
-                self.df.pivot(
-                    index=self.df.columns[0], columns=self.df.columns[1], values=self.df.columns[2])
-                return True
+                tempDF = self.df
+                try:
+                    tempDF.pivot(
+                        index=self.df.columns[0], columns=self.df.columns[1], values=self.df.columns[2])
+                    self.df = tempDF
+                    return True
+                except:
+                    return False
             else:
+                print("[formatData-Filter]: Did not convert to matrix format!")
                 return False
 
     def dropNonDataRows(self):
-
-        if not pd.api.types.is_datetime64_dtype(self.df.index):
-            self.df.rename(
-                columns={self.df.columns[0]: "TIMESTAMP"}, inplace=True, errors="raise")
+        
+        tempDF = self.df
+        if not pd.api.types.is_datetime64_dtype(tempDF.index):
+            tempDF.rename(
+                columns={tempDF.columns[0]: "TIMESTAMP"}, inplace=True, errors="raise")
             try:
-                start = self.df["TIMESTAMP"].where(self.df["TIMESTAMP"].str.contains(
+                start = tempDF["TIMESTAMP"].where(tempDF["TIMESTAMP"].str.contains(
                     "time", case=False, na=False)).first_valid_index()+1
-                self.names = self.df.iloc[start-2, 1::]
-                self.units = self.df.iloc[start-1, 1::]
+                self.names = tempDF.iloc[start-2, 1::]
+                self.units = tempDF.iloc[start-1, 1::]
                 for x in range(start):
-                    self.df = self.df.drop([x])
+                    tempDF = tempDF.drop([x])
+                self.df = tempDF
                 return True
             except:
                 return False
+        else:
+            print("[formatData-Filter]: Timestamp is already in datetime format!")
+            return False
 
     def setTimestampAsIndex(self):
 
         # Make first column datetime and set as index. Errors are set as NaT
-        if not pd.api.types.is_datetime64_dtype(self.df.index):
-            self.df["TIMESTAMP"] = pd.to_datetime(
-                self.df["TIMESTAMP"], infer_datetime_format=True, errors='coerce')
-            # TODO: Fill NaT's!
-            # IDEE: NaT auffüllen mit letzten Wert + .diff()
-            # 		letztes NaT + .diff() == nächster richtiger Zeitstempel zu kontrolle
-            # 		Hilfserie erzeugen mit [0] + n* diff und damit auffüllen.
-            time = self.df["TIMESTAMP"].copy()
-            diff = time.diff().median()
-            for x in range(1, time.size):
-                time.iloc[x] = time.iloc[x-1] + diff
-            # self.df["TIMESTAMP"] = self.df["TIMESTAMP"].fillna(method='pad')
-            # print(time)
-            # self.df.index = self.df.index.fillna()
-            self.df = self.df.set_index("TIMESTAMP")
-            return True
-        else:
+        tempDF = self.df
+        try: 
+            if not pd.api.types.is_datetime64_dtype(tempDF.index):
+                tempDF["TIMESTAMP"] = pd.to_datetime(tempDF["TIMESTAMP"], infer_datetime_format=True, errors='coerce')
+                tempDF = tempDF.set_index("TIMESTAMP")
+                self.df = tempDF
+                return True
+            else:
+                print("[formatData-Filter]: Timestamp is already in datetime format!")
+                return False
+        except:
             return False
 
     def setColumnNames(self):
-
-        if not self.names.size == 0:
-            self.df.columns = self.names
-            return True
-        else:
+        try:
+            if not self.names.size == 0:
+                self.df.columns = self.names
+                return True
+            else:
+                print("[formatData-Filter]: No names to set as column names found!")
+                return False
+        except:
             return False
 
 
     def cleanTypes(self):
 
-        self.df.apply(pd.to_numeric, errors='coerce')
-        return True
-
+        try: 
+            tempDF = self.df
+            tempDF.apply(pd.to_numeric, errors='coerce')
+            self.df = tempDF
+            return True
+        except:
+            return False
 
     def applyFilter(self, dataFrame: pd.DataFrame):
 
@@ -81,17 +91,27 @@ class FormatDataFrame(Filter):
 
         if self.fixRowFormat():
             print("[formatData-Filter]: Fixed Row Format")
+        else:
+            print("[formatData-Filter]: Transformation to matrix format failed!")
 
         if self.dropNonDataRows():
             print("[formatData-Filter]: Dropped Non Data Rows")
+        else:
+            print("[formatData-Filter]: Dropping name columns failed!")
 
         if self.setTimestampAsIndex():
             print("[formatData-Filter]: Set Timestamp as Index")
+        else:
+            print("[formatData-Filter]: Setting timestamp as index failed!")
 
         if self.setColumnNames():
             print("[formatData-Filter]: Set Columnames")
+        else:
+            print("[formatData-Filter]: Setting column names failed!")
 
         if self.cleanTypes():
-            print("[cleanTypes-Filter]: Casting the dataFrame to numeric")
+            print("[cleanTypes-Filter]: Casted the dataFrame to numeric")
+        else:
+            print("[formatData-Filter]: Casting the dataFrame to numeric failed!")
 
         return self.df
