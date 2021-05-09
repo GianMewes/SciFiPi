@@ -1,7 +1,17 @@
 ## CI-Actions
 [![Python package](https://github.com/GianMewes/KEEN/actions/workflows/testPython.yaml/badge.svg)](https://github.com/GianMewes/KEEN/actions/workflows/testPython.yaml)
 
-# KEEN
+
+<p align="center">
+    <img width="200px" src="images/SciFiPi-Logo_left.png">
+	<span align="center" style="font-size:64px; font-weight:bold; margin:2em;">Sci-Fi-Pi</span>
+	<img width="200px" src="images/SciFiPi-Logo_right.png">
+</p>
+
+<h2 align="center">The Scientific Filter Pipeline to Clean your Machine Learning Datasets<h2>
+
+
+<hr>
 
 
 Dateien mit gleichem Namen haben gleichen Inhalt
