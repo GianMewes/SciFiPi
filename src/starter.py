@@ -5,7 +5,7 @@ import collections
 import math
 
 from FilterBuilder import FilterBuilder
-from filters.FormatData import FormatDataFrame
+from cleaners.FormatData import FormatDataFrame
 
 class Starter():
 
@@ -23,6 +23,8 @@ class Starter():
             self.formatData(pd.read_csv("dirty_data/" + str(x)))
 
         filterBuilder = FilterBuilder(pd.concat([x for x in self.dataFrames ], axis=1))
+
+        print(dir(filterBuilder))
 
         for x in self.filters:
             if x == "formatData": filterBuilder.formatData()

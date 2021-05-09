@@ -1,14 +1,12 @@
 import pandas as pd
 
 from filters.Filter import Filter
-from filters.MissingValueFilter import MissingValueFilter
-from filters.MatrixFilter import MatrixFilter
-from filters.FormatData import FormatDataFrame
+from cleaners.FormatData import FormatDataFrame
 from filters.FixTimezone import FixTimezone
-from filters.FixTimeshifts import FixTimeshifts
+from preFilters.FixTimeshifts import FixTimeshifts
 from filters.UnitFilter import UnitFilter
-from filters.ImputationFilter import ImputationFilter
-from filters.Duplicates import Duplicates
+from preFilters.ImputationFilter import ImputationFilter
+from preFilters.Duplicates import Duplicates
 from filters.Noise import Noise
 from filters.Lag import Lag
 
