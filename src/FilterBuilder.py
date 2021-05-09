@@ -24,16 +24,6 @@ class FilterBuilder:
 		else:
 			print("FilterBuilder: No Valid Input!")
 
-	# def filterMissingValues(self):
-	# 	filter = MissingValueFilter()
-	# 	self.dataFrame = filter.applyFilter(self.dataFrame)
-	# 	return self
-
-	# def filterMatrix(self):
-	# 	filter = MatrixFilter()
-	# 	self.dataFrame = filter.applyFilter(self.dataFrame)
-	# 	return self
-
 	def formatData(self):
 		filter = FormatDataFrame()
 		self.dataFrame = filter.applyFilter(self.dataFrame)

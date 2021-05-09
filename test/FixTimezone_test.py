@@ -8,6 +8,6 @@ class FixTimezoneTest(unittest.TestCase):
     def testCalculation(self):
         
 
-if __name__ == '__main__':
+    if __name__ == '__main__':
 
-    unittest.main()
+        unittest.main()
