@@ -25,7 +25,11 @@ In order to use SciFiPi as a CLI tool, open a shell inside the src folder and ex
 
 
 ## Architecture
-### Idea
+### Idea & Existing Filters
+The idea of SciFiPi is to provide a flexible data cleaning & filtering pipeline that covers a variety of use cases. You can apply a variety of filters in any arbitrary order and if that's not enough, SciFiPi provides an extension mechanism that allows to extend the library with custom filter functions.
+
+The existing filters of SciFiPi can be separated into three categories:
+
 ### Extend SciFiPi
 ### Current Limitations
 
