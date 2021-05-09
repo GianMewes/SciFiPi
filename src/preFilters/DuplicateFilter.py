@@ -4,7 +4,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from scipy.spatial import distance_matrix
 from filters.Filter import Filter
 
-class Duplicates(Filter):
+class DuplicateFilter(Filter):
 	def applyFilter(self, dataFrame:pd.DataFrame):
 		# EASY METHOD for detecting exact duplicates
 		# iterate through all columns in dataFrame and find equal columns (duplicates) + delete duplicate columns
