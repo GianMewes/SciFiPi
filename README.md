@@ -12,7 +12,22 @@
 <hr>
 
 
+## Usage
+SciFiPi can be used either as a standalone tool with a command line interface (CLI) or as a library which you can include into your own code. These two options are described below
 
+### CLI
+In order to use SciFiPi as a CLI tool, open a shell inside the src folder and execute ```python .\src\SciFiPi --filters filter1 filter2 filterN ``` with filter1 - filterN being the prefilters and filters you want to apply. Note that they don't have to be in any particular order. You can even mix prefilters and filters, SciFiPi will take care of order.
+
+
+### Library
+
+
+
+
+## Architecture
+### Idea
+### Extend SciFiPi
+### Current Limitations
 
 
 ## Erkenntnisse zu den Datenset
