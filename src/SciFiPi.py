@@ -75,12 +75,8 @@ class SciFiPi():
 				print("Error while calling the filter '" + filter + "'!")
 
 		
-		
-
-		for x in self.filters:
-			if x == "formatData": filterBuilder.formatData()
-			elif x == "World": print("Hello World!")
-			else: print("Error!")
+		cleanDataFrame = filterBuilder.getDataFrame()
+		cleanDataFrame.to_csv(r'clean_data/cleaned_data.csv')
 
 	def getFilesInFolder(self):
 
