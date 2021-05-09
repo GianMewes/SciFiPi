@@ -68,6 +68,13 @@ class FormatDataFrame(Filter):
         else:
             return False
 
+
+    def cleanTypes(self):
+
+        self.df.apply(pd.to_numeric, errors='coerce')
+        return True
+
+
     def applyFilter(self, dataFrame: pd.DataFrame):
 
         self.df = dataFrame
@@ -83,5 +90,8 @@ class FormatDataFrame(Filter):
 
         if self.setColumnNames():
             print("[formatData-Filter]: Set Columnames")
+
+        if self.cleanTypes():
+            print("[cleanTypes-Filter]: Casting the dataFrame to numeric")
 
         return self.df
