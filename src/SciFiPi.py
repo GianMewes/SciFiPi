@@ -19,17 +19,18 @@ class SciFiPi():
 
 	def __init__(self):
 
+		# Create the CLI argument parser
+		argParser = argparse.ArgumentParser(prog='SciFiPi', description='Cleans your ML data set by applying a set of filters')
+
+		# Add CLI arguments
+		argParser.add_argument('--filters', metavar='filter', type=str, nargs="+",
+		                            help='The list of filters that should be applied to the dataset')
+
 		self.getFilesInFolder()
 
 		for x in self.files:
 			self.formatData(pd.read_csv("dirty_data/" + str(x)))
 
-		# Create the CLI argument parser
-		argParser = argparse.ArgumentParser(description='Cleans your ML data set by applying a set of filters')
-
-		# Add CLI arguments
-		argParser.add_argument('--filters', metavar='filters', type=str, nargs="+",
-		                            help='The list of filters that should be applied to the dataset')
 
 		# User input arguments. Capitalize and prepend "filter" to each one
 		userInputFilters = argParser.parse_args().filters
