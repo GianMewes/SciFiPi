@@ -1,15 +1,19 @@
 [![Python package](https://github.com/GianMewes/KEEN/actions/workflows/testPython.yaml/badge.svg)](https://github.com/GianMewes/KEEN/actions/workflows/testPython.yaml)
 [![PyPI version](https://badge.fury.io/py/SciFiPi.svg)](https://badge.fury.io/py/SciFiPi)
 
+
 <p align="center">
     <img width="250px" src="https://github.com/GianMewes/KEEN/blob/documentation/images/images/SciFiPi-Logo_right.png">
     <img width="250px" src="https://github.com/GianMewes/KEEN/blob/documentation/images/images/SciFiPi-Logo_left.png"> 
 </p>
 
-<h1 align="center">Sci-Fi-Pi<h2>
-<h2 align="center">The Scientific Filtering Pipeline to Clean your Machine Learning Datasets<h2>
+<h2 align="center">The Scientific Filter Pipeline to Clean your Machine Learning Datasets<h2>
+
 
 <hr>
+
+
+Dateien mit gleichem Namen haben gleichen Inhalt
 
 
 ## Usage
