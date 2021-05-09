@@ -6,7 +6,6 @@ from filters.FixTimezone import FixTimezone
 from preFilters.FixTimeshifts import FixTimeshifts
 from filters.UnitFilter import UnitFilter
 from preFilters.ImputationFilter import ImputationFilter
-from preFilters.Duplicates import Duplicates
 from filters.Noise import Noise
 from filters.Lag import Lag
 
@@ -22,6 +21,10 @@ class FilterBuilder:
 			self.dataFrame = pd.DataFrame
 		else:
 			print("FilterBuilder: No Valid Input!")
+
+	def getDataFrame(self):
+		return self.dataFrame
+
 
 	def filterMissingValues(self):
 		filter = MissingValueFilter()
@@ -52,19 +55,6 @@ class FilterBuilder:
 		filter = UnitFilter()
 		self.dataFrame = filter.applyFilter(self.dataFrame)
 		return self
-
-	def filterImputation(self):
-		filter = ImputationFilter()
-		self.dataFrame = filter.applyFilter(self.dataFrame)
-		return self
-
-	def getDataFrame(self):
-		return self.dataFrame
-
-	def removeDuplicates(self):
-		filter = Duplicates()
-		self.dataFrame = filter.applyFilter(self.dataFrame)
-		return self.dataFrame
 
 	def removeNoise(self, columnlist):
 		filter = Noise()
