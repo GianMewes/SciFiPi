@@ -20,16 +20,16 @@ class SciFiPi():
 	def __init__(self):
 
 		# Create the CLI argument parser
-		argParser = argparse.ArgumentParser(description='Cleans your ML data set by applying a set of filters')
+		argParser = argparse.ArgumentParser(prog='SciFiPi', description='Cleans your ML data set by applying a set of filters')
 
 		# Add CLI arguments
-		argParser.add_argument('--filters', metavar='filters', type=str, nargs="+",
+		argParser.add_argument('--filters', metavar='filter', type=str, nargs="+",
 		                            help='The list of filters that should be applied to the dataset')
 
-		# User input arguments. Capitalize and prepend "filter" to each one
+		# User input arguments. Convert to lower case and prepend "filter" to each one
 		userInputFilters = argParser.parse_args().filters
-		userInputFilters = [userFilter.capitalize() for userFilter in userInputFilters]
-		userInputFilters = ["filter"+userFilter for userFilter in userInputFilters]
+		userInputFilters = [userFilter.lower() for userFilter in userInputFilters]
+		userInputFilters = ["filter" + userFilter for userFilter in userInputFilters]
 
 		self.getFilesInFolder()
 
@@ -41,37 +41,35 @@ class SciFiPi():
 		filterBuilder = FilterBuilder()
 		filterMethods = self.getOwnMethods(filterBuilder)
 
-		print(userInputFilters)
-		
-		# Check for each user: Is it a Prefilter or Filter?
+		# Check for each userFilter: Is it a Prefilter or Filter?
 		preFiltersToExecute = []
 		filtersToExecute = []
+
 		for userFilter in userInputFilters:
-			if (userFilter) in preFilterMethods:
-				preFiltersToExecute.append(userFilter)
-			elif (userFilter) in filterMethods:
-				filtersToExecute.append(userFilter)
+			if userFilter in preFilterMethods:
+				preFiltersToExecute.append(preFilterMethods[userFilter])
+
+			elif userFilter in filterMethods:
+				filtersToExecute.append(filterMethods[userFilter])
+
 			else:
 				print("The filter '" + userFilter + "' is neither implemented as a prefilter nor as a filter and will therefore not be called.")
 
 		# Call the prefilters
 		for preFilter in preFiltersToExecute:
 			try:
-				getattr(preFilterBuilder, preFilter)
-			except:
-				print("Error while calling the prefilter'" + preFilter + "'!")
+				getattr(preFilterBuilder, preFilter)()
+			except Exception as err:
+				print("Error while calling the prefilter'" + preFilter + "'! Error: " + str(err))
 
 		# Take the prefilter's dataFrame, pass it to the filterBuilder and call all filters
-		# TODO: Wäre hier ein setter nicht cooler? Dann könnte man die selbe Instanz des filterBuilders verwenden.
 		filterBuilder.setDataFrame(preFilterBuilder.getDataFrame())
-		# dataFrameAfterPreFiltering = preFilterBuilder.getDataFrame()
-		# filterBuilder = FilterBuilder(dataFrameAfterPreFiltering)
 
 		for filter in filtersToExecute:
 			try:
-				getattr(filterBuilder, filter)
-			except:
-				print("Error while calling the filter '" + filter + "'!")
+				getattr(filterBuilder, filter)()
+			except Exception as err:
+				print("Error while calling the filter '" + filter + "'! Error: " + str(err))
 
 		
 		cleanDataFrame = filterBuilder.getDataFrame()
@@ -102,9 +100,17 @@ class SciFiPi():
 
 		return True
 
+
 	def getOwnMethods(self, obj):
-		return [method for method in dir(obj) if not method.startswith('__')]
-		
+		"""
+		Creates a dictionary of the objects methods. Keys are the lower case method names, values the correct names
+		"""
+		methods = [method for method in dir(obj) if not method.startswith('__')]
+		methodDict = {}
+		for method in methods:
+			lowCaseMethod = method.lower()
+			methodDict[lowCaseMethod] = method
+		return methodDict
 
 
 
