@@ -92,3 +92,8 @@ This is also rather straightforward. Define a function for your filter. In order
 
 
 ### Current Limitations
+Due to limited time, some limitations still exist. 
+1. The equidistance filter has a large runtime due to high computational complexity.
+2. The DecimalShiftFilter is occasionally to sensitive to changes. Sometimes decimal shifts are detected where there are none. If sensitivity is artificially lowered, some true decimal shifts are not detected any more.
+3. LagFilter requires specifications on which columns are possible linked by a time lag.
+4. NoiseFilter needs instruction on which columns should be freed from noise. This is due to individual characteristics of columns - what constitutes noise in one sensor, might be valid data for other sensors.
