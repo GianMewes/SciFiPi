@@ -15,7 +15,6 @@ class SciFiPi():
 
 	filters = []
 	files = []
-	dataFrames = []
 	df: pd.DataFrame
 
 	def __init__(self):
@@ -27,19 +26,15 @@ class SciFiPi():
 		argParser.add_argument('--filters', metavar='filter', type=str, nargs="+",
 		                            help='The list of filters that should be applied to the dataset')
 
-		self.getFilesInFolder()
-
-		for x in self.files:
-			self.formatData(pd.read_csv("dirty_data/" + str(x)))
-
-
 		# User input arguments. Convert to lower case and prepend "filter" to each one
 		userInputFilters = argParser.parse_args().filters
 		userInputFilters = [userFilter.lower() for userFilter in userInputFilters]
 		userInputFilters = ["filter" + userFilter for userFilter in userInputFilters]
 
+		self.getFilesInFolder()
+
 		# Get all PreFilter Methods:
-		preFilterBuilder = PreFilterBuilder(pd.concat([x for x in self.dataFrames ], axis=1))
+		preFilterBuilder = PreFilterBuilder(self.files)
 		preFilterMethods = self.getOwnMethods(preFilterBuilder)
 
 		# Get all Filter Methods
@@ -67,9 +62,8 @@ class SciFiPi():
 			except Exception as err:
 				print("Error while calling the prefilter'" + preFilter + "'! Error: " + str(err))
 
-		# Take the prefilter's dataFrama, pass it to the filterBuilder and call all filters
-		dataFrameAfterPreFiltering = preFilterBuilder.getDataFrame()
-		filterBuilder = FilterBuilder(dataFrameAfterPreFiltering)
+		# Take the prefilter's dataFrame, pass it to the filterBuilder and call all filters
+		filterBuilder.setDataFrame(preFilterBuilder.getDataFrame())
 
 		for filter in filtersToExecute:
 			try:
@@ -80,6 +74,7 @@ class SciFiPi():
 		
 		cleanDataFrame = filterBuilder.getDataFrame()
 		cleanDataFrame.to_csv(r'clean_data/cleaned_data.csv')
+
 
 	def getFilesInFolder(self):
 
@@ -103,12 +98,6 @@ class SciFiPi():
 			if not collections.Counter(self.files) == collections.Counter(synFiles):
 				print("\nPrefix wasn't right. Ciao!") & exit()
 
-		return True
-
-
-	def formatData(self, df):
-		filter = FormatDataFrame()
-		self.dataFrames.append(filter.applyFilter(df))
 		return True
 
 

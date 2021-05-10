@@ -21,6 +21,10 @@ class FilterBuilder:
 	def getDataFrame(self):
 		return self.dataFrame
 
+	def setDataFrame(self, df:pd.DataFrame):
+		self.dataFrame = df
+		return self
+
 	def filterDecimalShift(self):
 		filter = DecimalShiftFilter()
 		self.dataFrame = filter.applyFilter(self.dataFrame)
