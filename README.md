@@ -23,7 +23,7 @@ In order to use SciFiPi as a CLI tool, first clone this repository or download t
 ## List of Filters
 You can use any number of the following filters in any order:
 - filterDuplicates (CLI name: "duplicates")
-- filterEquidistant (CLI name: "equidistant")
+- filterEquidistant (CLI name: "equidistance")
 - filterImputation (CLI name: "imputation")
 - filterFillTimestamps (CLI name: "fillTimestamps" ): The fillTimestamps-Filter is scanning the dataFrames index for NaTs. If NaTs are found, a synthetic timestamp is created by the start time and the difference between the timestamps. The index is then filled by this synthetic timestamp.
 - filterFixTimezone (CLI name: "fixtimezone"): The FixTimezoneFilter is searching for timezone information in the dataframes index. If a timezone information is found it is transferred into datetime-format. If no timezone information is given, the local timezone is set. By adding timezone information into the index of dataframes, the signals of individual dataframes are mapped by the time recorded.
