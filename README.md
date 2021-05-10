@@ -25,9 +25,12 @@ You can use any number of the following filters in any order:
 - filterDuplicates (CLI name: "duplicates")
 - filterEquidistant (CLI name: "equidistant")
 - filterImputation (CLI name: "imputation")
+- filterFillTimestamps (CLI name: "fillTimestamps" ): The fillTimestamps-Filter is scanning the dataFrames index for NaTs. If NaTs are found, a synthetic timestamp is created by the start time and the difference between the timestamps. The index is then filled by this synthetic timestamp.
+- filterFixTimezone (CLI name: "fixtimezone"): The FixTimezoneFilter is searching for timezone information in the dataframes index. If a timezone information is found it is transferred into datetime-format. If no timezone information is given, the local timezone is set. By adding timezone information into the index of dataframes, the signals of individual dataframes are mapped by the time recorded.
 - filterDecimalShift (CLI name: "decimalshift")
 - filterNoise (CLI name: "noise")
 - filterLag (CLI name: "lag")
+- FormatData ("Cleaner" - run by default): This isn't actually a filter as the others. FormatData is called in the constructor of the PreFilterBuilder to format the read data into a standardized format for the following actual filters. Therefor multiple files are merged, all files are transformed to matrix format, non-data-rows as die signal names and units are dropped and later set als column names. Furthermore the timestamp is set as index and all cells are transferred to numeric.
 
 
 ## Architecture
