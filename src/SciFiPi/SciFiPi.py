@@ -33,10 +33,10 @@ class SciFiPi():
 			self.formatData(pd.read_csv("dirty_data/" + str(x)))
 
 
-		# User input arguments. Capitalize and prepend "filter" to each one
+		# User input arguments. Convert to lower case and prepend "filter" to each one
 		userInputFilters = argParser.parse_args().filters
-		userInputFilters = [userFilter.capitalize() for userFilter in userInputFilters]
-		userInputFilters = ["filter"+userFilter for userFilter in userInputFilters]
+		userInputFilters = [userFilter.lower() for userFilter in userInputFilters]
+		userInputFilters = ["filter" + userFilter for userFilter in userInputFilters]
 
 		# Get all PreFilter Methods:
 		preFilterBuilder = PreFilterBuilder(pd.concat([x for x in self.dataFrames ], axis=1))
@@ -49,11 +49,14 @@ class SciFiPi():
 		# Check for each userFilter: Is it a Prefilter or Filter?
 		preFiltersToExecute = []
 		filtersToExecute = []
+
 		for userFilter in userInputFilters:
-			if (userFilter) in preFilterMethods:
-				preFiltersToExecute.append(userFilter)
-			elif (userFilter) in filterMethods:
-				filtersToExecute.append(userFilter)
+			if userFilter in preFilterMethods:
+				preFiltersToExecute.append(preFilterMethods[userFilter])
+
+			elif userFilter in filterMethods:
+				filtersToExecute.append(filterMethods[userFilter])
+
 			else:
 				print("The filter '" + userFilter + "' is neither implemented as a prefilter nor as a filter and will therefore not be called.")
 
@@ -61,8 +64,8 @@ class SciFiPi():
 		for preFilter in preFiltersToExecute:
 			try:
 				getattr(preFilterBuilder, preFilter)()
-			except:
-				print("Error while calling the prefilter'" + preFilter + "'!")
+			except Exception as err:
+				print("Error while calling the prefilter'" + preFilter + "'! Error: " + str(err))
 
 		# Take the prefilter's dataFrama, pass it to the filterBuilder and call all filters
 		dataFrameAfterPreFiltering = preFilterBuilder.getDataFrame()
@@ -71,8 +74,8 @@ class SciFiPi():
 		for filter in filtersToExecute:
 			try:
 				getattr(filterBuilder, filter)()
-			except:
-				print("Error while calling the filter '" + filter + "'!")
+			except Exception as err:
+				print("Error while calling the filter '" + filter + "'! Error: " + str(err))
 
 		
 		cleanDataFrame = filterBuilder.getDataFrame()
@@ -108,9 +111,17 @@ class SciFiPi():
 		self.dataFrames.append(filter.applyFilter(df))
 		return True
 
+
 	def getOwnMethods(self, obj):
-		return [method for method in dir(obj) if not method.startswith('__')]
-		
+		"""
+		Creates a dictionary of the objects methods. Keys are the lower case method names, values the correct names
+		"""
+		methods = [method for method in dir(obj) if not method.startswith('__')]
+		methodDict = {}
+		for method in methods:
+			lowCaseMethod = method.lower()
+			methodDict[lowCaseMethod] = method
+		return methodDict
 
 
 
