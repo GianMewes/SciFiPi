@@ -20,17 +20,24 @@ In order to use SciFiPi as a CLI tool, first clone this repository or download t
 ### Library
 
 
+## List of Cleaners
+These filters are run by default:
+- FormatData ("Cleaner" - run by default): This isn't actually a filter as the others. FormatData is called in the constructor of the PreFilterBuilder to format the read data into a standardized format for the following actual filters. Therefor multiple files are merged, all files are transformed to matrix format, non-data-rows as die signal names and units are dropped and later set als column names. Furthermore the timestamp is set as index and all cells are transferred to numeric.
+
+
+## List of PreFilters
+
+- filterDuplicates (CLI name: "duplicates"): The DuplicatesFilter checks every possible column pair for exact matches (easy method). Alternativley a more advanced method can be used, where the similarity of the column pairs is calculated using the cosine similarity and euclidean distance from the sklearn and scipy libraries. The combination check of both similarity measures results in exact, linear transformed and partial duplicates.
+- filterEquidistance (CLI name: "equidistance"): The EquidistanceFilter finds the most frequent distance value in the index column by using the mode. Afterwards the index is recreated by using the resample() method from the pandas library and setting the offset to the most frequent distance value.
+- filterImputation (CLI name: "imputation")
+- filterFillTimestamps (CLI name: "fillTimestamps"): The fillTimestamps-Filter is scanning the dataFrames index for NaTs. If NaTs are found, a synthetic timestamp is created by the start time and the difference between the timestamps. The index is then filled by this synthetic timestamp.
+- filterFixTimezone (CLI name: "fixtimezone"): The FixTimezoneFilter is searching for timezone information in the dataframes index. If a timezone information is found it is transferred into datetime-format. If no timezone information is given, the local timezone is set. By adding timezone information into the index of dataframes, the signals of individual dataframes are mapped by the time recorded.
+
 ## List of Filters
 You can use any number of the following filters in any order:
-- filterDuplicates (CLI name: "duplicates")
-- filterEquidistant (CLI name: "equidistance")
-- filterImputation (CLI name: "imputation")
-- filterFillTimestamps (CLI name: "fillTimestamps" ): The fillTimestamps-Filter is scanning the dataFrames index for NaTs. If NaTs are found, a synthetic timestamp is created by the start time and the difference between the timestamps. The index is then filled by this synthetic timestamp.
-- filterFixTimezone (CLI name: "fixtimezone"): The FixTimezoneFilter is searching for timezone information in the dataframes index. If a timezone information is found it is transferred into datetime-format. If no timezone information is given, the local timezone is set. By adding timezone information into the index of dataframes, the signals of individual dataframes are mapped by the time recorded.
 - filterDecimalShift (CLI name: "decimalshift")
-- filterNoise (CLI name: "noise")
-- filterLag (CLI name: "lag")
-- FormatData ("Cleaner" - run by default): This isn't actually a filter as the others. FormatData is called in the constructor of the PreFilterBuilder to format the read data into a standardized format for the following actual filters. Therefor multiple files are merged, all files are transformed to matrix format, non-data-rows as die signal names and units are dropped and later set als column names. Furthermore the timestamp is set as index and all cells are transferred to numeric.
+- filterNoise (CLI name: "noise"): The NoiseFilter uses a k-Nearest-Neighbours regressor (from the sklearn library) to self-predict the column and remove noise.
+- filterLag (CLI name: "lag"): The LagFilter uses Dynamic Time Warping (DTW - from the dtwalign library) to dynamically align two lagged columns and recreate them in their respective dataframe columns.
 
 
 ## Architecture
