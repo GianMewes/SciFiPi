@@ -68,7 +68,7 @@ class SciFiPi():
 		preFilterBuilder = PreFilterBuilder(self.files)
 		for preFilterName, preFilterArgs in preFiltersToExecute.items():
 			try:
-				if(preFilterArgs == None):
+				if(preFilterArgs == None or preFilterArgs == ""):
 					getattr(preFilterBuilder, preFilterName)()
 				else:
 					getattr(preFilterBuilder, preFilterName)(preFilterArgs)
@@ -79,7 +79,7 @@ class SciFiPi():
 		filterBuilder = FilterBuilder(preFilterBuilder.getDataFrame())
 		for filterName, filterArgs in filtersToExecute.items():
 			try:
-				if(filterArgs == None):
+				if(filterArgs == None or filterArgs == ""):
 					getattr(filterBuilder, filterName)()
 				else:
 					filterArgs = ast.literal_eval(filterArgs)
