@@ -29,13 +29,13 @@ These filters are run by default:
 
 - filterDuplicates (CLI name: "duplicates"): The DuplicatesFilter checks every possible column pair for exact matches (easy method). Alternativley a more advanced method can be used, where the similarity of the column pairs is calculated using the cosine similarity and euclidean distance from the sklearn and scipy libraries. The combination check of both similarity measures results in exact, linear transformed and partial duplicates.
 - filterEquidistance (CLI name: "equidistance"): The EquidistanceFilter finds the most frequent distance value in the index column by using the mode. Afterwards the index is recreated by using the resample() method from the pandas library and setting the offset to the most frequent distance value.
-- filterImputation (CLI name: "imputation")
+- filterImputation (CLI name: "imputation"): Adds missing values. On small dataframes (less than three columns) missing values are replaced via backfilling. on larger dataframes, missing values are added via a decision tree with backfilling as a fallback strategy.
 - filterFillTimestamps (CLI name: "fillTimestamps"): The fillTimestamps-Filter is scanning the dataFrames index for NaTs. If NaTs are found, a synthetic timestamp is created by the start time and the difference between the timestamps. The index is then filled by this synthetic timestamp.
 - filterFixTimezone (CLI name: "fixtimezone"): The FixTimezoneFilter is searching for timezone information in the dataframes index. If a timezone information is found it is transferred into datetime-format. If no timezone information is given, the local timezone is set. By adding timezone information into the index of dataframes, the signals of individual dataframes are mapped by the time recorded.
 
 ### List of Filters
 You can use any number of the following filters in any order:
-- filterDecimalShift (CLI name: "decimalshift")
+- filterDecimalShift (CLI name: "decimalshift"): Checks for sudden jumps in the data caused by decimal place errors. Identified errors are then multiplied/devided by 10.
 - filterNoise (CLI name: "noise"): The NoiseFilter uses a k-Nearest-Neighbours regressor (from the sklearn library) to self-predict the column and remove noise.
 - filterLag (CLI name: "lag"): The LagFilter uses Dynamic Time Warping (DTW - from the dtwalign library) to dynamically align two lagged columns and recreate them in their respective dataframe columns.
 
