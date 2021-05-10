@@ -1,6 +1,10 @@
+argparse
 ipykernel
 ipython
 ipython-genutils
 numpy
 pandas
-py7zr
+scikit-learn
+fastdtw
+dtwalign
+tzlocal
