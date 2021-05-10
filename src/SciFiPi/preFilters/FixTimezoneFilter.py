@@ -5,7 +5,7 @@ from tzlocal import get_localzone
 
 from filters.Filter import Filter
 
-class FixTimezone(Filter):
+class FixTimezoneFilter(Filter):
 
     def applyFilter(self, dataFrame:pd.DataFrame):
         # Check and set timezone information

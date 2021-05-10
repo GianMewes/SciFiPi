@@ -4,7 +4,7 @@ from sklearn.neighbors import KNeighborsRegressor
 
 from filters.Filter import Filter
 
-class Noise(Filter):
+class NoiseFilter(Filter):
     def applyFilter(self, dataFrame:pd.DataFrame, columnlist):
         # check if columnlist is empty (all columns selected) or if certain columns are selected
         # if empty --> ALL dataframe columns are assigned to columnlist

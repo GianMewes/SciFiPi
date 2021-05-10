@@ -5,7 +5,7 @@ from fastdtw import fastdtw
 
 from filters.Filter import Filter
 
-class Lag(Filter):
+class LagFilter(Filter):
 	def applyFilter(self, dataFrame:pd.DataFrame, columnPairs):
 		# notes:
 		# lag is defined as a time series x, which represents the time series y shifted by the lag z (expressed in time)

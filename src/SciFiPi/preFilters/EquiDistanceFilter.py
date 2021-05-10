@@ -3,7 +3,7 @@ import numpy as np
 
 from filters.Filter import Filter
 
-class EquiDistance(Filter):
+class EquiDistanceFilter(Filter):
     def applyFilter(self, dataFrame:pd.DataFrame):
         # find most frequent index distance value
         # create two new columns for the index and the difference between two neighbouring index values

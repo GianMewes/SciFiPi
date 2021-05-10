@@ -4,7 +4,7 @@ from sklearn.svm import OneClassSVM
 
 from filters.Filter import Filter
 
-class UnitFilter(Filter):
+class DecimalShiftFilter(Filter):
 	def applyFilter(self, dataFrame:pd.DataFrame):
 		# print("UnitValueFilter. DataFrame: " + str(dataFrame))
 

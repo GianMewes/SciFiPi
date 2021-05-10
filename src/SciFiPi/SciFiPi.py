@@ -8,6 +8,7 @@ import math
 from FilterBuilder import FilterBuilder
 from PreFilterBuilder import PreFilterBuilder
 from cleaners.FormatData import FormatDataFrame
+from helper.yes_no import yes_no
 
 
 class SciFiPi():
@@ -117,19 +118,3 @@ class SciFiPi():
 if __name__ == '__main__':
 
     SciFiPi()
-
-
-def yes_no(answer):
-    yes = set(['y'])
-    no = set(['n'])
-
-    while True:
-        choice = input(answer).lower()
-        if choice in yes:
-            return True
-        elif choice in no:
-            return False
-        else:
-            print("Please respond with 'y' or 'n' ")
-
-
