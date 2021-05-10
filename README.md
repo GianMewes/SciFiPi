@@ -15,7 +15,7 @@
 SciFiPi can be used either as a standalone tool with a command line interface (CLI) or as a library which you can include into your own code. These two options are described below
 
 ### CLI
-In order to use SciFiPi as a CLI tool, first clone this repository or download the code. After obtaining the code, open a shell inside the src folder and execute ```python SciFiPi.py --filters filter1 filter2 filterN ``` with filter1 - filterN being the prefilters and filters you want to apply. Note that they don't have to be in any particular order. You can even mix prefilters and filters, SciFiPi will take care of order.
+In order to use SciFiPi as a CLI tool, first clone this repository or download the code. After obtaining the code, open a shell inside the src folder and execute ```python SciFiPi.py --filters filter1 | filter2 | filterN ``` with filter1 - filterN being the prefilters and filters you want to apply. Note that they don't have to be in any particular order. You can even mix prefilters and filters, SciFiPi will take care of order. Filters are separated by pipe characters. If any arguments are passed to the lag or noise filter, they are passed in parentheses, e.g. lag([[1, 2],[4, 5]]) to remove lag in columns 1/2 and 3/4 or noise([2]) to filter noise from the second column.
 
 ### Library
 
