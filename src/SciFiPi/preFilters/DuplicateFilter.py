@@ -29,6 +29,8 @@ class DuplicateFilter(Filter):
 		print(listOfColumnPairs_exact)
 		print(dataFrame_new.shape)
 
+		return dataFrame
+
 		'''# ADVANCED METHOD for detecting different kinds of duplicates
         # calculate similarity of columns, using the cosine similirarity and euclidean distance
 		# article https://medium.com/@sasi24/cosine-similarity-vs-euclidean-distance-e5d9a9375fc8 compares both similarity measures
