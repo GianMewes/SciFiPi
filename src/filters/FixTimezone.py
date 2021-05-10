@@ -1,7 +1,7 @@
+import datetime
 import pandas as pd
 
-from dateutil.tz import *
-from datetime import *
+from tzlocal import get_localzone
 
 from filters.Filter import Filter
 
@@ -11,13 +11,10 @@ class FixTimezone(Filter):
         # Check and set timezone information
         # print(dataFrame.head())
         if str(dataFrame.index.tzinfo) == "None":
-            dataFrame = dataFrame.tz_localize(tz = "UTC")
+            print("[FixTimezoneFilter]: No timezone information found. Setting local timezone: " + get_localzone().zone)
+            dataFrame = dataFrame.tz_localize(tz = get_localzone())
         else:
-            dataFrame = dataFrame.tz_convert(tz = "UTC")       
-            # print(dataFrame.head()) 
+            dataFrame = dataFrame.tz_convert(tz = get_localzone())       
         
-        # TODO : Was ist wenn der DataFrame in einer anderen Zeitzone aufgenommen wurde, aber keine tzinfo enhaelt?
-        # Wenn zwei gleiche Datensätze, dann nimm den mit Zeitzonen-Information
-
         return dataFrame
 
