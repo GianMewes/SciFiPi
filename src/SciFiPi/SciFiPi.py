@@ -15,15 +15,9 @@ class SciFiPi():
 
 	filters = []
 	files = []
-	dataFrames = []
 	df: pd.DataFrame
 
 	def __init__(self):
-
-		self.getFilesInFolder()
-
-		for x in self.files:
-			self.formatData(pd.read_csv("dirty_data/" + str(x)))
 
 		# Create the CLI argument parser
 		argParser = argparse.ArgumentParser(description='Cleans your ML data set by applying a set of filters')
@@ -37,8 +31,10 @@ class SciFiPi():
 		userInputFilters = [userFilter.capitalize() for userFilter in userInputFilters]
 		userInputFilters = ["filter"+userFilter for userFilter in userInputFilters]
 
+		self.getFilesInFolder()
+
 		# Get all PreFilter Methods:
-		preFilterBuilder = PreFilterBuilder(pd.concat([x for x in self.dataFrames ], axis=1))
+		preFilterBuilder = PreFilterBuilder(self.files)
 		preFilterMethods = self.getOwnMethods(preFilterBuilder)
 
 		# Get all Filter Methods
@@ -65,9 +61,11 @@ class SciFiPi():
 			except:
 				print("Error while calling the prefilter'" + preFilter + "'!")
 
-		# Take the prefilter's dataFrama, pass it to the filterBuilder and call all filters
-		dataFrameAfterPreFiltering = preFilterBuilder.getDataFrame()
-		filterBuilder = FilterBuilder(dataFrameAfterPreFiltering)
+		# Take the prefilter's dataFrame, pass it to the filterBuilder and call all filters
+		# TODO: Wäre hier ein setter nicht cooler? Dann könnte man die selbe Instanz des filterBuilders verwenden.
+		filterBuilder.setDataFrame(preFilterBuilder.getDataFrame())
+		# dataFrameAfterPreFiltering = preFilterBuilder.getDataFrame()
+		# filterBuilder = FilterBuilder(dataFrameAfterPreFiltering)
 
 		for filter in filtersToExecute:
 			try:
@@ -78,6 +76,7 @@ class SciFiPi():
 		
 		cleanDataFrame = filterBuilder.getDataFrame()
 		cleanDataFrame.to_csv(r'clean_data/cleaned_data.csv')
+
 
 	def getFilesInFolder(self):
 
@@ -101,12 +100,6 @@ class SciFiPi():
 			if not collections.Counter(self.files) == collections.Counter(synFiles):
 				print("\nPrefix wasn't right. Ciao!") & exit()
 
-		return True
-
-
-	def formatData(self, df):
-		filter = FormatDataFrame()
-		self.dataFrames.append(filter.applyFilter(df))
 		return True
 
 	def getOwnMethods(self, obj):

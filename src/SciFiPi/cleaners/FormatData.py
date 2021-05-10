@@ -1,6 +1,5 @@
 import pandas as pd
 
-from helper.yes_no import yes_no
 from filters.Filter import Filter
 
 
@@ -11,20 +10,20 @@ class FormatDataFrame(Filter):
     units: pd.DataFrame
 
     def fixRowFormat(self):
-
-        if len((self.df.columns)) == 3:
-            if yes_no("This might be in row format. Shall I convert it to matrix format for you?"):
-                tempDF = self.df
-                try:
-                    tempDF.pivot(
-                        index=self.df.columns[0], columns=self.df.columns[1], values=self.df.columns[2])
-                    self.df = tempDF
-                    return True
-                except:
-                    return False
-            else:
-                print("[formatData-Filter]: Did not convert to matrix format!")
+        
+        if len((self.df.columns)) == 2:
+            tempDF = self.df
+            try:
+                tempDF.pivot(columns=tempDF.columns[0], values=tempDF.columns[1])
+                tempDF.rename(
+                columns={tempDF.columns[0]: "TIMESTAMP"}, inplace=True, errors="raise")
+                self.df = tempDF
+                return True
+            except:
                 return False
+        else:
+            print("[formatData-Filter]: Did not convert to matrix format!")
+            return False
 
     def dropNonDataRows(self):
         
@@ -86,28 +85,27 @@ class FormatDataFrame(Filter):
             return False
 
     def applyFilter(self, dataFrame: pd.DataFrame):
-
+        
         self.df = dataFrame
-
+        
         if self.fixRowFormat():
             print("[formatData-Filter]: Fixed Row Format")
         else:
             print("[formatData-Filter]: Transformation to matrix format failed!")
+            if self.dropNonDataRows():
+                print("[formatData-Filter]: Dropped Non Data Rows")
+            else:
+                print("[formatData-Filter]: Dropping name columns failed!")
 
-        if self.dropNonDataRows():
-            print("[formatData-Filter]: Dropped Non Data Rows")
-        else:
-            print("[formatData-Filter]: Dropping name columns failed!")
+            if self.setColumnNames():
+                print("[formatData-Filter]: Set Columnames")
+            else:
+                print("[formatData-Filter]: Setting column names failed!")
 
         if self.setTimestampAsIndex():
             print("[formatData-Filter]: Set Timestamp as Index")
         else:
             print("[formatData-Filter]: Setting timestamp as index failed!")
-
-        if self.setColumnNames():
-            print("[formatData-Filter]: Set Columnames")
-        else:
-            print("[formatData-Filter]: Setting column names failed!")
 
         if self.cleanTypes():
             print("[cleanTypes-Filter]: Casted the dataFrame to numeric")
