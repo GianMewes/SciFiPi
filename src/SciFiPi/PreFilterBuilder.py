@@ -33,7 +33,6 @@ class PreFilterBuilder:
             self.dataFrame = pd.DataFrame
         else:
             print("FilterBuilder: No Valid Input!")
-        print(self.dataFrame.head())
 
 
     def getDataFrame(self):
