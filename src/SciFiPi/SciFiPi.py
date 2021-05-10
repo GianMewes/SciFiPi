@@ -4,6 +4,7 @@ import sys
 import os
 import collections
 import math
+import ast
 
 from FilterBuilder import FilterBuilder
 from PreFilterBuilder import PreFilterBuilder
@@ -28,44 +29,63 @@ class SciFiPi():
 		argParser = argparse.ArgumentParser(prog='SciFiPi', description='Cleans your ML data set by applying a set of filters', formatter_class=argparse.RawTextHelpFormatter)
 
 		# Add CLI arguments
-		argParser.add_argument('--filters', metavar='filter', type=str, nargs="+",
+		argParser.add_argument('--filters', metavar='filter', type=str,
 		                            help='The list of filters that should be applied to the dataset. Currently, the following filters can be applied: \nPrefilters: ' + str(list(preFilterMethods.keys())) + "\nFilters: " + str(list(filterMethods.keys())))
 
 
-		# User input arguments. Convert to lower case and prepend "filter" to each one
-		userInputFilters = argParser.parse_args().filters
-		userInputFilters = [userFilter.lower() for userFilter in userInputFilters]
+		# User input arguments. Convert to lower case
+		rawUserInputFilters = argParser.parse_args().filters
+		userInputFilters = rawUserInputFilters.replace(" ", "").split("|")
 
 
-		# Check for each userFilter: Is it a Prefilter or Filter?
-		preFiltersToExecute = []
-		filtersToExecute = []
+		# There could be filters with arguments -> Split into filter name and argument
+		userFilterDict = dict()
 		for userFilter in userInputFilters:
-			if userFilter in preFilterMethods:
-				preFiltersToExecute.append(preFilterMethods[userFilter])
+			if "(" in userFilter:
+				splittedFilter = userFilter.split("(", 1)
+				filterName = splittedFilter[0]
+				filterArgs = splittedFilter[1].removesuffix(")")
+			else:
+				filterName = userFilter
+				filterArgs = None
+			userFilterDict[filterName.lower()] = filterArgs
+		
+		# Check for each userFilter: Is it a Prefilter or Filter?
+		preFiltersToExecute = dict()
+		filtersToExecute = dict()
+		for filterName, filterArgs in userFilterDict.items():
+			if filterName in preFilterMethods:
+				preFiltersToExecute[preFilterMethods[filterName]] = filterArgs
 
-			elif userFilter in filterMethods:
-				filtersToExecute.append(filterMethods[userFilter])
+			elif filterName in filterMethods:
+				filtersToExecute[filterMethods[filterName]] = filterArgs
 
 			else:
-				print("The filter '" + userFilter + "' is neither implemented as a prefilter nor as a filter and will therefore not be called.")
+				print("The filter '" + filterName + "' is neither implemented as a prefilter nor as a filter and will therefore not be called.")
+
 
 		# Call the prefilters
 		preFilterBuilder = PreFilterBuilder(self.files)
-		for preFilter in preFiltersToExecute:
+		for preFilterName, preFilterArgs in preFiltersToExecute.items():
 			try:
-				getattr(preFilterBuilder, preFilter)()
+				if(preFilterArgs == None):
+					getattr(preFilterBuilder, preFilterName)()
+				else:
+					getattr(preFilterBuilder, preFilterName)(preFilterArgs)
 			except Exception as err:
-				print("Error while calling the prefilter '" + preFilter + "'! Error: " + str(err))
+				print("Error while calling the prefilter'" + preFilterName + "'! Error: " + str(err))
 
 		# Take the prefilter's dataFrame, pass it to the filterBuilder and call all filters
 		filterBuilder = FilterBuilder(preFilterBuilder.getDataFrame())
-
-		for filter in filtersToExecute:
+		for filterName, filterArgs in filtersToExecute.items():
 			try:
-				getattr(filterBuilder, filter)()
+				if(filterArgs == None):
+					getattr(filterBuilder, filterName)()
+				else:
+					filterArgs = ast.literal_eval(filterArgs)
+					getattr(filterBuilder, filterName)(filterArgs)
 			except Exception as err:
-				print("Error while calling the filter '" + filter + "'! Error: " + str(err))
+				print("Error while calling the filter '" + filterName + "'! Error: " + str(err))
 
 		
 		cleanDataFrame = filterBuilder.getDataFrame()
