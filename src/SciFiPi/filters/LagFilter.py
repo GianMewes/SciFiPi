@@ -30,7 +30,7 @@ class LagFilter(Filter):
 		# tutorial: https://htmlpreview.github.io/?https://github.com/statefb/dtwalign/blob/master/example/example.html
 		
 		for columnPair in columnPairs:
-			print(columnPair[0])
+			# print(columnPair[0])
 			values_list_1 = dataFrame.iloc[0:100,columnPair[0]].to_numpy()
 			values_list_2 = dataFrame.iloc[0:100,columnPair[1]].to_numpy()
 			res = dtw(values_list_1, values_list_2)

@@ -52,7 +52,7 @@ class ImputationFilter(Filter):
 							values[i] = dTree.predict(data.iloc[i].values.reshape(1,-1))[0]
 						except:
 							pass 
-					print('[Imputation-Filter] Added missing values in column '+ col + ' via decision tree regression.')
+					print('[Imputation-Filter]: Added missing values in column '+ col + ' via decision tree regression.')
 
 
 				dataFrame[col] = values
@@ -61,7 +61,7 @@ class ImputationFilter(Filter):
 				if values.hasnans:
 					# print('Found unhandled missing values in column '+ col)
 					values.fillna(method = 'backfill', inplace = True)
-					print('[Imputation-Filter] Added missing values in column '+ col + ' via backfilling.')
+					print('[Imputation-Filter]: Added missing values in column '+ col + ' via backfilling.')
 					dataFrame[col] = values
 
 

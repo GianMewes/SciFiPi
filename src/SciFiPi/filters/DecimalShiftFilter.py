@@ -28,11 +28,11 @@ class DecimalShiftFilter(Filter):
 					if multiplier_low[i] < multiplier_high[i]:
 						for n in range(multiplier_low[i], multiplier_high[i]):
 							values[n] = values[n] * 10
-						print('[DecimalShift] Detected comma error in ' + col + '.')
+						print('[Decimalshift-Filter]: Detected comma error in ' + col + '.')
 					elif multiplier_low[i] > multiplier_high[i]:
 						for n in range(multiplier_high[i], multiplier_low[i]):
 							values[n] = values[n] / 10
-						print('[DecimalShift] Detected comma error in ' + col + '.')
+						print('[Decimalshift-Filter]: Detected comma error in ' + col + '.')
 
 				dataFrame[col] = values
 				

@@ -60,7 +60,7 @@ class SciFiPi():
 			try:
 				getattr(preFilterBuilder, preFilter)()
 			except Exception as err:
-				print("Error while calling the prefilter'" + preFilter + "'! Error: " + str(err))
+				print("Error while calling the prefilter '" + preFilter + "'! Error: " + str(err))
 
 		# Take the prefilter's dataFrame, pass it to the filterBuilder and call all filters
 		filterBuilder.setDataFrame(preFilterBuilder.getDataFrame())

@@ -10,7 +10,7 @@ class DuplicateFilter(Filter):
 		# iterate through all columns in dataFrame and find equal columns (duplicates) + delete duplicate columns
 		listOfColumnPairs_exact = []
 		dataFrame_new = dataFrame
-		print(dataFrame_new.shape)
+		# print(dataFrame_new.shape)
 		for i in range(0, len(dataFrame.columns)-2):
 			for j in range(i + 1, len(dataFrame.columns)-1):
 				if dataFrame.iloc[:,i].equals(dataFrame.iloc[:,j]):
@@ -26,8 +26,8 @@ class DuplicateFilter(Filter):
 					dataFrame_new.drop(dataFrame_new.columns[listOfColumnPair_exact[1]], inplace=True, axis=1)
 				else:
 					pass
-		print(listOfColumnPairs_exact)
-		print(dataFrame_new.shape)
+		# print(listOfColumnPairs_exact)
+		# print(dataFrame_new.shape)
 
 		return dataFrame
 
