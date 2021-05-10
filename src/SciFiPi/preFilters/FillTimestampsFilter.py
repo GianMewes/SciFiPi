@@ -16,6 +16,6 @@ class FillTimestampsFilter(Filter):
 
             tempIndex.fillna(value=time, inplace=True)
         else:
-            print("There are no NaT's to fill!")
+            print("[fillTimestamps-Filter]: There are no NaT's to fill!")
 
         return dataFrame
