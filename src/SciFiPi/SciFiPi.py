@@ -46,9 +46,7 @@ class SciFiPi():
 		filterBuilder = FilterBuilder()
 		filterMethods = self.getOwnMethods(filterBuilder)
 
-		print(userInputFilters)
-		
-		# Check for each user: Is it a Prefilter or Filter?
+		# Check for each userFilter: Is it a Prefilter or Filter?
 		preFiltersToExecute = []
 		filtersToExecute = []
 		for userFilter in userInputFilters:
@@ -62,7 +60,7 @@ class SciFiPi():
 		# Call the prefilters
 		for preFilter in preFiltersToExecute:
 			try:
-				getattr(preFilterBuilder, preFilter)
+				getattr(preFilterBuilder, preFilter)()
 			except:
 				print("Error while calling the prefilter'" + preFilter + "'!")
 
@@ -72,7 +70,7 @@ class SciFiPi():
 
 		for filter in filtersToExecute:
 			try:
-				getattr(filterBuilder, filter)
+				getattr(filterBuilder, filter)()
 			except:
 				print("Error while calling the filter '" + filter + "'!")
 
