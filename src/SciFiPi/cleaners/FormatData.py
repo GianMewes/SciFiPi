@@ -20,6 +20,7 @@ class FormatDataFrame(Filter):
                 self.df = tempDF
                 return True
             except:
+                print("[formatData-Filter]: Transformation to matrix format failed!")
                 return False
         else:
             print("[formatData-Filter]: Did not convert to matrix format!")
@@ -65,7 +66,7 @@ class FormatDataFrame(Filter):
     def setColumnNames(self):
         try:
             if not self.names.size == 0:
-                self.df.columns = self.names
+                self.df.rename(self.names, axis='columns', inplace=True)
                 return True
             else:
                 print("[formatData-Filter]: No names to set as column names found!")
@@ -91,7 +92,6 @@ class FormatDataFrame(Filter):
         if self.fixRowFormat():
             print("[formatData-Filter]: Fixed Row Format")
         else:
-            print("[formatData-Filter]: Transformation to matrix format failed!")
             if self.dropNonDataRows():
                 print("[formatData-Filter]: Dropped Non Data Rows")
             else:
