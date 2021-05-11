@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
   name = 'SciFiPi',
-  version = '0.0.1', 				
+  version = '0.0.4', 				
   license='MIT',
   description = 'SciFiPi - The scientific filtering pipeline to clean your machine learning datasets',
   long_description = long_description,
@@ -39,6 +39,7 @@ setuptools.setup(
 	'Programming Language :: Python :: 3.7',
 	'Programming Language :: Python :: 3.8',
 	'Programming Language :: Python :: 3.9',
+	
   ],
   package_dir={"": "src"},
   packages=setuptools.find_packages(where="src"),
