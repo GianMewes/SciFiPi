@@ -1,9 +1,9 @@
 import pandas as pd
 
-from filters.Filter import Filter
-from filters.DecimalShiftFilter import DecimalShiftFilter
-from filters.NoiseFilter import NoiseFilter
-from filters.LagFilter import LagFilter
+from .filters.Filter import Filter
+from .filters.DecimalShiftFilter import DecimalShiftFilter
+from .filters.NoiseFilter import NoiseFilter
+from .filters.LagFilter import LagFilter
 
 class FilterBuilder:
 	dataFrame: pd.DataFrame

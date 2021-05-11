@@ -3,7 +3,7 @@ import pandas as pd
 
 from tzlocal import get_localzone
 
-from filters.Filter import Filter
+from ..filters.Filter import Filter
 
 class FixTimezoneFilter(Filter):
 

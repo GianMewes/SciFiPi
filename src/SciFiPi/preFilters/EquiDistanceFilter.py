@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-from filters.Filter import Filter
+from ..filters.Filter import Filter
 
 class EquiDistanceFilter(Filter):
     def applyFilter(self, dataFrame:pd.DataFrame):

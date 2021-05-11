@@ -1,12 +1,12 @@
 import pandas as pd
 
-from cleaners.FormatData import FormatDataFrame
+from .cleaners.FormatData import FormatDataFrame
 
-from preFilters.DuplicateFilter import DuplicateFilter
-from preFilters.ImputationFilter import ImputationFilter
-from preFilters.EquiDistanceFilter import EquiDistanceFilter
-from preFilters.FillTimestampsFilter import FillTimestampsFilter
-from preFilters.FixTimezoneFilter import FixTimezoneFilter
+from .preFilters.DuplicateFilter import DuplicateFilter
+from .preFilters.ImputationFilter import ImputationFilter
+from .preFilters.EquiDistanceFilter import EquiDistanceFilter
+from .preFilters.FillTimestampsFilter import FillTimestampsFilter
+from .preFilters.FixTimezoneFilter import FixTimezoneFilter
 
 class PreFilterBuilder:
 

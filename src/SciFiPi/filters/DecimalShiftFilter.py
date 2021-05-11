@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.svm import OneClassSVM
 
-from filters.Filter import Filter
+from .Filter import Filter
 
 class DecimalShiftFilter(Filter):
 	def applyFilter(self, dataFrame:pd.DataFrame):

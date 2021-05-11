@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.neighbors import KNeighborsRegressor
 
-from filters.Filter import Filter
+from .Filter import Filter
 
 class NoiseFilter(Filter):
     def applyFilter(self, dataFrame:pd.DataFrame, columnlist):
