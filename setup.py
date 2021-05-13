@@ -13,7 +13,7 @@ setuptools.setup(
   author = 'HSU Institute of Automation',
   #author_email = 'your.email@domain.com',
   url = 'https://github.com/GianMewes/KEEN',
-  download_url = 'https://github.com/GianMewes/KEEN/archive/refs/tags/v0.0.1-beta.tar.gz',
+  download_url = 'https://github.com/GianMewes/KEEN/archive/refs/tags/v0.0.4.tar.gz',
   keywords = ['Data Preprocessing', 'Data Filtering', 'Machine Learning', 'AI', 'Data Science', 'python'],
   install_requires=[
     'argparse',
