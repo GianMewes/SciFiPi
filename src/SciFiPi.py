@@ -6,10 +6,10 @@ import collections
 import math
 import ast
 
-from FilterBuilder import FilterBuilder
-from PreFilterBuilder import PreFilterBuilder
-from cleaners.FormatData import FormatDataFrame
-from helper.yes_no import yes_no
+from SciFiPi.FilterBuilder import FilterBuilder
+from SciFiPi.PreFilterBuilder import PreFilterBuilder
+from SciFiPi.cleaners.FormatData import FormatDataFrame
+from SciFiPi.helper.yes_no import yes_no
 
 
 class SciFiPi():
@@ -49,7 +49,7 @@ class SciFiPi():
 				filterName = userFilter
 				filterArgs = None
 			userFilterDict[filterName.lower()] = filterArgs
-		
+
 		# Check for each userFilter: Is it a Prefilter or Filter?
 		preFiltersToExecute = dict()
 		filtersToExecute = dict()
@@ -124,7 +124,7 @@ class SciFiPi():
 		methods = [method for method in dir(className) if method.startswith('filter')]
 		methodDict = {}
 		for method in methods:
-			lowCaseMethod = method.lower().removeprefix("filter")
+			lowCaseMethod = method.lower().replace("filter","")
 			methodDict[lowCaseMethod] = method
 		return methodDict
 

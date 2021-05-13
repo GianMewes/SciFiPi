@@ -1,6 +1,6 @@
 import pandas as pd
 
-from filters.Filter import Filter
+from ..filters.Filter import Filter
 
 
 class FillTimestampsFilter(Filter):

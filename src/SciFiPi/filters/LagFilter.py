@@ -3,7 +3,7 @@ import numpy as np
 from dtwalign import dtw
 from fastdtw import fastdtw
 
-from filters.Filter import Filter
+from .Filter import Filter
 
 class LagFilter(Filter):
 	def applyFilter(self, dataFrame:pd.DataFrame, columnPairs):

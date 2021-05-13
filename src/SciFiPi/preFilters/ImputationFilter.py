@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn import tree
 
-from filters.Filter import Filter
+from ..filters.Filter import Filter
 
 class ImputationFilter(Filter):
 	def applyFilter(self, dataFrame:pd.DataFrame):

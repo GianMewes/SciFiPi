@@ -2,7 +2,8 @@ import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from scipy.spatial import distance_matrix
-from filters.Filter import Filter
+
+from ..filters.Filter import Filter
 
 class DuplicateFilter(Filter):
 	def applyFilter(self, dataFrame:pd.DataFrame):
